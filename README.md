@@ -26,7 +26,7 @@ Current commercial and open-source phishing simulation platforms suffer from cri
 
 ## **3\. Proposed System: PHISH SLAYER**
 
-![][image1]
+![Phish Slayer Architecture](phish_slayer_architecture.jpeg)
 
 PHISH SLAYER introduces the **Context-Aware Simulation Engine (CASE)**. Instead of relying on templates, the system dynamically generates scenarios based on an employee's real-time professional environment.
 
