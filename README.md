@@ -1,5 +1,7 @@
 # PHISH SLAYER - Open-Source Context-Aware Phishing Simulation Framework
 
+![PHISH SLAYER Cover](coverimage.png)
+
 > **SEO Summary:** PHISH SLAYER is an open-source, context-aware phishing simulation framework that uses Large Language Models (LLMs), the Model Context Protocol (MCP), and secure CMDB integrations to deliver hyper-personalized security awareness training, spear-phishing simulations, and measurable cyber resilience outcomes.
 
 **Keywords:** phishing simulation, spear-phishing simulation, security awareness training, cyber resilience, model context protocol, MCP, CMDB integration, AI security training, open-source security platform, human-in-the-loop security
