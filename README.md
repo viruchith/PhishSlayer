@@ -1,10 +1,72 @@
-# **Project Proposal: PHISH SLAYER**
+# PHISH SLAYER - Open-Source Context-Aware Phishing Simulation Framework
+
+> **SEO Summary:** PHISH SLAYER is an open-source, context-aware phishing simulation framework that uses Large Language Models (LLMs), the Model Context Protocol (MCP), and secure CMDB integrations to deliver hyper-personalized security awareness training, spear-phishing simulations, and measurable cyber resilience outcomes.
+
+**Keywords:** phishing simulation, spear-phishing simulation, security awareness training, cyber resilience, model context protocol, MCP, CMDB integration, AI security training, open-source security platform, human-in-the-loop security
+
+## Primary Use Cases
+
+- Build context-aware phishing simulation campaigns using CMDB metadata.
+- Run spear-phishing awareness programs with human-in-the-loop ethical review.
+- Measure security behavior improvements with telemetry-driven KPIs (CTR, TTR, reporting rates).
+- Integrate security simulations with enterprise tools like ServiceNow, Jira Service Management, Slack, and Microsoft Teams.
+- Deploy an open-source alternative to commercial phishing simulation platforms with customizable LLM backends.
+
+## Contributor Discovery Tags
+
+security awareness platform, phishing simulation framework, MCP server architecture, LLM prompt engineering for security, CMDB connector development, SOC training automation, red-team simulation tooling, blue-team resilience analytics, open-source cybersecurity project
+
+## Documentation Map
+
+- [Project Architecture (MCP)](MCP_ARCHITECTURE.md) - full MCP-native system design, tools/resources/prompts model, and security controls.
+- [Simulation Scenario Examples](EXAMPLES.md) - high-fidelity context-aware phishing and social engineering simulation examples.
+- [Project Proposal (this document)](README.md) - vision, roadmap, stack, and implementation strategy.
+
+## Table of Contents
+
+1. [Executive Summary](#executive-summary)
+2. [Problem Statement](#1-problem-statement)
+3. [Existing Systems and Limitations](#2-existing-systems--limitations)
+4. [Proposed System: PHISH SLAYER](#3-proposed-system-phish-slayer)
+5. [System Architecture](#4-system-architecture)
+6. [Technology Stack](#5-technology-stack)
+7. [Advantages and Value Proposition](#6-advantages--value-proposition)
+8. [Implementation Roadmap](#7-implementation-roadmap)
+9. [Project Team and Expertise](#8-project-team--expertise)
+10. [Success Metrics and KPIs](#9-success-metrics--key-performance-indicators-kpis)
+11. [Future Enhancements](#10-future-enhancements)
+12. [Related Technical Documents](#related-technical-documents)
+13. [FAQ (Implementation and Security)](#faq-implementation-and-security)
+
+## FAQ (Implementation and Security)
+
+### Is PHISH SLAYER production-ready today?
+PHISH SLAYER is currently positioned as a project proposal and architecture blueprint. The phased roadmap in this document outlines the path from foundation and connector development to pilot deployment and open-source release.
+
+### What data is sent to the LLM?
+The design uses context minimization: only necessary professional metadata is passed to generation workflows. Sensitive content and PII are intentionally excluded, masked, or redacted based on policy and consent controls.
+
+### How is consent enforced?
+Consent is enforced through auditable access workflows and immutable tracking references. In the MCP design, every sensitive data access action is tied to explicit approval context and compliance controls.
+
+### Does PHISH SLAYER support human review before sending simulations?
+Yes. The architecture includes a mandatory human-in-the-loop review gate where security analysts can approve, edit, or reject AI-generated simulation narratives before dispatch.
+
+### Which systems can PHISH SLAYER integrate with?
+Planned integrations include CMDB and service-management ecosystems such as ServiceNow and Jira Service Management, with dispatch support for email, Slack, and Microsoft Teams.
+
+### Where can I see protocol details and realistic scenarios?
+For protocol and security design, see [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md). For campaign-style examples, see [EXAMPLES.md](EXAMPLES.md).
+
+## **Project Proposal: PHISH SLAYER**
 
 **An Open-Source Framework for Context-Aware Security Resilience**
 
 ## **Executive Summary**
 
 Traditional security awareness training relies on static, generic templates that fail to prepare employees for modern, highly targeted cyber-attacks. **PHISH SLAYER** is a Free and Open-Source Software (FOSS) project designed to bridge this gap. By integrating Large Language Models (LLMs) with the Model Context Protocol (MCP) to securely query internal Configuration Management Databases (CMDB), PHISH SLAYER automates the creation of hyper-personalized, context-aware social engineering simulations. This project aims to democratize enterprise-grade spear-phishing defense, transforming passive compliance training into active cyber resilience.
+
+For the full protocol-level blueprint, see [MCP Architecture](MCP_ARCHITECTURE.md). For practical simulation narratives, see [Scenario Examples](EXAMPLES.md).
 
 ---
 
@@ -30,6 +92,8 @@ Current commercial and open-source phishing simulation platforms suffer from cri
 
 PHISH SLAYER introduces the **Context-Aware Simulation Engine (CASE)**. Instead of relying on templates, the system dynamically generates scenarios based on an employee's real-time professional environment.
 
+To review concrete simulation outputs generated from this approach, visit [EXAMPLES.md](EXAMPLES.md).
+
 The core philosophy is to use the attackers' weapons—**Intelligence and Context**—to build a resilient workforce. By referencing real project IDs, actual linked software assets, and verifiable personnel hierarchies, the simulations test critical thinking and verification protocols rather than simple pattern recognition.
 
 ## **4\. System Architecture**
@@ -45,6 +109,8 @@ The architecture is divided into four secure, modular layers:
 
 * **Model Context Protocol (MCP) Bridge:** Acts as the secure, standardized connective tissue between the internal data source and the AI intelligence.  
 * **LLM Intelligence:** A Large Language Model processes the contextual anchors and synthesizes a bespoke communication (email, Slack, or Teams message) that perfectly mimics the company’s internal professional tone.
+
+The protocol-level design and JSON-RPC MCP primitives are documented in [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md).
 
 ### **Layer 3: Control & Dispatch (The Guardrails)**
 
@@ -108,3 +174,12 @@ Following the initial FOSS release, future iterations of PHISH SLAYER will focus
 * **Multi-Channel Simulations:** Expanding beyond email to include voice (vishing) and SMS (smishing) simulations, integrating context from HR systems to identify personal contact vectors.  
 * **Automated Remediation Workflows:** Building connectors to ticketing systems (e.g., Jira, Zendesk) to automatically create incident response tickets when a user reports a successful simulation.  
 * **Dynamic Difficulty Scaling:** Implementing an adaptive system that increases the contextual complexity and subtlety of simulations based on an individual or department's consistent success rate.
+
+---
+
+## Related Technical Documents
+
+- [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md): Detailed universal MCP application architecture for PHISH SLAYER, including tools, resources, prompts, security controls, and JSON-RPC execution flows.
+- [EXAMPLES.md](EXAMPLES.md): Realistic context-aware spear-phishing and social engineering simulation examples covering cloud, CI/CD, and internal collaboration attack patterns.
+
+If you are implementing the platform, start with [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md). If you are designing training campaigns, start with [EXAMPLES.md](EXAMPLES.md).

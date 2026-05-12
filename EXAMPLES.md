@@ -1,5 +1,7 @@
 These high-fidelity scenarios demonstrate how **PHISH SLAYER** utilizes intelligence and context to simulate advanced spear-phishing and social engineering threats.  
 
+**Related Docs:** [Project Overview](README.md) | [MCP Architecture](MCP_ARCHITECTURE.md)
+
 ## 1. Third-Party Integration Scenarios
 By querying the CMDB, the system identifies which third-party tools are linked to specific internal projects.  
 

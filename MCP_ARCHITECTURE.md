@@ -2,6 +2,8 @@
 **Version:** 1.0 | **Protocol:** MCP v1.0 (JSON-RPC 2.0) | **License:** FOSS (Apache 2.0/MIT)
 **Mission:** Bridge LLMs and enterprise CMDBs securely to automate hyper-personalized, context-aware spear-phishing simulations and transform compliance into active cyber resilience.
 
+**Related Docs:** [Project Overview](README.md) | [Simulation Scenarios](EXAMPLES.md)
+
 ---
 
 ## 1. Architectural Overview
