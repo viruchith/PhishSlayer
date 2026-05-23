@@ -1,0 +1,16 @@
+{
+  "name": "phish-slayer",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c cyan,magenta \"pnpm --filter phish-slayer-backend dev\" \"pnpm --filter phish-slayer-frontend dev\"",
+    "dev:backend": "pnpm --filter phish-slayer-backend dev",
+    "dev:frontend": "pnpm --filter phish-slayer-frontend dev",
+    "build": "pnpm --filter phish-slayer-frontend build",
+    "start:backend": "pnpm --filter phish-slayer-backend start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -23,6 +23,23 @@ security awareness platform, phishing simulation framework, MCP server architect
 - [Project Architecture (MCP)](MCP_ARCHITECTURE.md) - full MCP-native system design, tools/resources/prompts model, and security controls.
 - [Simulation Scenario Examples](EXAMPLES.md) - high-fidelity context-aware phishing and social engineering simulation examples.
 - [Project Proposal (this document)](README.md) - vision, roadmap, stack, and implementation strategy.
+- [**Backend PoC — runbook & API**](backend/README.md) - Fastify service, env, routes, logging, troubleshooting.
+- [**Frontend PoC — runbook & UI**](frontend/README.md) - Preact/Vite dashboard, proxy, build, client logging.
+
+## Interactive PoC prototype (CASE + mock MCP)
+
+This repository includes a **local, read-only proof-of-concept**: Fastify backend (`/backend`) with a synthetic CMDB, a mock MCP context route, Google **Gemini 2.5 Flash** (`gemini-2.5-flash` by default; override with `GEMINI_MODEL`) generation (with automatic mock fallback), and a **Preact + Tailwind** analyst dashboard (`/frontend`). Nothing is emailed or posted to Slack/Teams; approved items are stored in an in-memory telemetry array only.
+
+**Quick start**
+
+1. Enable Corepack (ships with Node 16.13+): `corepack enable` — then install dependencies from the repo root: `pnpm install`
+2. Optional: copy [`.env.example`](.env.example) to `.env` and set `GEMINI_API_KEY` (the UI still works end-to-end without it).
+3. Run both servers: `pnpm run dev`  
+   - Backend: [http://127.0.0.1:8787/api/health](http://127.0.0.1:8787/api/health)  
+   - Frontend (Vite): [http://127.0.0.1:5173](http://127.0.0.1:5173) (proxies `/api` to the backend)  
+4. **Verbose logs (JSON lines):** `logs/backend.log` (HTTP hooks, Gemini, telemetry) and `logs/frontend.log` (browser events posted to `POST /api/client-log`). The `logs/` directory is created automatically and is gitignored.
+
+**Other scripts:** `pnpm run dev:backend`, `pnpm run dev:frontend`, `pnpm run build` (frontend production build). The repo uses **pnpm** workspaces ([`pnpm-workspace.yaml`](pnpm-workspace.yaml)); lockfile is [`pnpm-lock.yaml`](pnpm-lock.yaml).
 
 ## Table of Contents
 
