@@ -1,10 +1,25 @@
-# PHISH SLAYER - Open-Source Context-Aware Phishing Simulation Framework
+# PHISH SLAYER — Open-Source Context-Aware Phishing Simulation Framework
 
-![PHISH SLAYER Cover](coverimage.png)
+<!-- Indexing helpers: phishing simulation framework, spear phishing simulation, security awareness training SAT, cyber resilience, Model Context Protocol MCP, CMDB integration, LLM security training, human in the loop HITL, red team blue team, social engineering simulation, Google Gemini, Fastify API, Preact Vite -->
 
-> **SEO Summary:** PHISH SLAYER is an open-source, context-aware phishing simulation framework that uses Large Language Models (LLMs), the Model Context Protocol (MCP), and secure CMDB integrations to deliver hyper-personalized security awareness training, spear-phishing simulations, and measurable cyber resilience outcomes.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE)
+[![pnpm workspace](https://img.shields.io/badge/managed%20with-pnpm-C93897?logo=pnpm&logoColor=white)](https://pnpm.io)
+[![Node.js 18+](https://img.shields.io/badge/node.js-%3E%3D18-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Backend: Fastify](https://img.shields.io/badge/backend-Fastify-000000?logo=fastify&logoColor=white)](https://fastify.dev/)
+[![Frontend: Vite](https://img.shields.io/badge/bundle-Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![UI: Preact](https://img.shields.io/badge/UI-Preact-673AB8?logo=preact&logoColor=white)](https://preactjs.com/)
+[![Tailwind CSS](https://img.shields.io/badge/styles-Tailwind-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Google Gemini](https://img.shields.io/badge/LLM-Google%20Gemini-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
+[![Docs: MCP architecture](https://img.shields.io/badge/docs-MCP%20architecture-111827?logo=readthedocs&logoColor=white)](./MCP_ARCHITECTURE.md)
+[![Scenario examples](https://img.shields.io/badge/docs-scenario%20examples-111827?logo=readthedocs&logoColor=white)](./EXAMPLES.md)
 
-**Keywords:** phishing simulation, spear-phishing simulation, security awareness training, cyber resilience, model context protocol, MCP, CMDB integration, AI security training, open-source security platform, human-in-the-loop security
+![PHISH SLAYER — context-aware phishing simulation and security awareness training platform cover image](coverimage.png)
+
+> **SEO summary:** **PHISH SLAYER** is a free and open-source (**FOSS**) **context-aware phishing simulation** and **security awareness training** framework. It combines **Large Language Models (LLMs)** (including **Google Gemini**), the **Model Context Protocol (MCP)** for tool-style **CMDB** reads, and **human-in-the-loop** review to produce **hyper-personalized spear-phishing simulations**, analyst dashboards, and **measurable cyber-resilience** outcomes (reporting, click-through, and time-to-report signals)—without replacing production **phishing simulation platforms** wholesale, but demonstrating how **AI-assisted SAT** can stay grounded in **enterprise asset** and **identity context**.
+
+**Keywords:** phishing simulation, spear-phishing simulation, security awareness training (SAT), cyber resilience, Model Context Protocol, MCP, CMDB integration, AI security training, open-source security platform, human-in-the-loop security, social engineering simulation, red team / blue team training, SOC enablement, Google Gemini, Fastify, Preact, Vite, Tailwind CSS, pnpm monorepo
+
+**Repository overview (for search & contributors):** Monorepo **pnpm** workspace (`pnpm-workspace.yaml`) with a **Fastify** **Node.js** backend (synthetic CMDB, mock MCP context, `/api` routes, optional Gemini generation) and a **Preact + Vite + Tailwind** single-page **analyst dashboard** for CASE (**Context-Aware Simulation Engine**) workflows. See [Backend runbook](./backend/README.md) and [Frontend runbook](./frontend/README.md).
 
 ## Primary Use Cases
 
@@ -14,9 +29,9 @@
 - Integrate security simulations with enterprise tools like ServiceNow, Jira Service Management, Slack, and Microsoft Teams.
 - Deploy an open-source alternative to commercial phishing simulation platforms with customizable LLM backends.
 
-## Contributor Discovery Tags
+## Contributor discovery tags
 
-security awareness platform, phishing simulation framework, MCP server architecture, LLM prompt engineering for security, CMDB connector development, SOC training automation, red-team simulation tooling, blue-team resilience analytics, open-source cybersecurity project
+enterprise phishing simulation, CMDB-driven spear phishing, MCP read-only context bridge, security behavior analytics, phishing awareness KPIs, gamified security training, FOSS SAT alternative, LLM red teaming ethics, synthetic employee CMDB, telemetry staging dashboard
 
 ## Documentation Map
 
