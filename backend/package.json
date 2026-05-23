@@ -1,0 +1,16 @@
+{
+  "name": "phish-slayer-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.2",
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1"
+  }
+}
