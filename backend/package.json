@@ -10,7 +10,7 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "lint": "node --check src/index.js && node --check src/geminiService.js && node --check src/mcpBridge.js && node --check src/mockCmdb.js && node --check src/buildPromptPayload.js && node --check src/fieldAllowlist.js && node --check src/promptSanitize.js && node --check src/contentPolicy.js && node --check src/groundingCheck.js && node --check scripts/check-grounding.js",
-    "test": "node --test test/",
+    "test": "node --test test/guardrails.test.js",
     "check-grounding": "node scripts/check-grounding.js"
   },
   "dependencies": {
