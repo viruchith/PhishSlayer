@@ -10,7 +10,7 @@ This package is **`phish-slayer-frontend`** in the pnpm monorepo ([`../pnpm-work
 
 ## Requirements
 
-- **Node.js** 18+ and [**pnpm**](https://pnpm.io/installation) (see root `packageManager` in [`../package.json`](../package.json); `corepack enable` is enough to match the pinned version)
+- **Node.js** 20+ and [**pnpm**](https://pnpm.io/installation) (see root `packageManager` in [`../package.json`](../package.json); `corepack enable` is enough to match the pinned version)
 - A running **backend** on **`http://127.0.0.1:8787`** when using `/api/*` in dev (Vite proxy) or in production behind the same origin / reverse proxy
 
 ---

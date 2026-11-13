@@ -29,8 +29,8 @@ These are design observations, not a competitive benchmark study.
 | Synthetic / real CMDB context | Source of grounding anchors | **Implemented (PoC)** — in-memory synthetic CMDB only |
 | MCP-style context bridge | Standardize tool-style reads | **Mock** — HTTP route shaped like context fetch; not a real MCP server |
 | LLM generation | Draft subject / pretext / body | **Implemented (PoC)** — Gemini with mock fallback |
-| Field allowlist + prompt hygiene | Minimize and delimit untrusted data | **Implemented (PoC)** when present under `backend/src/` (`fieldAllowlist`, prompt sanitize) |
-| Content policy gate | Block sensitive personal/HR topics | **Implemented (PoC)** when present under `backend/src/` (`contentPolicy`) |
+| Field allowlist + prompt hygiene | Minimize and delimit untrusted data | **Implemented (PoC)** — `fieldAllowlist.js`, `promptSanitize.js`, `buildPromptPayload.js` |
+| Content policy gate | Block sensitive personal/HR topics | **Implemented (PoC)** — `contentPolicy.js` + UI block on approve |
 | Human-in-the-loop review UI | Approve / edit / discard | **Implemented (PoC)** |
 | Dispatch (email / Slack / Teams) | Deliver simulations | **Idea only** — out of scope |
 | Persistent telemetry / reporting | Measure campaigns | **Mock** — in-memory array only |
@@ -45,7 +45,9 @@ synthetic CMDB → mock MCP context → LLM (or mock) → policy check → human
 
 ### Vision architecture (not built)
 
-The fuller four-layer diagram in [`phish_slayer_architecture.jpeg`](../phish_slayer_architecture.jpeg) describes the **aspiration** (real connectors, dispatch, learning loop). Treat unbuilt boxes as ideas.
+![Vision architecture — not the running PoC](../phish_slayer_architecture.jpeg)
+
+*Caption: aspirational layered design (real CMDB connectors, dispatch, learning loop). Most boxes are **Idea only**. The running PoC is the short flow above: synthetic CMDB → mock MCP → LLM → policy → human review → in-memory telemetry.*
 
 ## Technology (honest)
 

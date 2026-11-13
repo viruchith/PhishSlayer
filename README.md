@@ -6,6 +6,7 @@ Can an LLM, grounded in internal asset context, produce more realistic phishing 
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE)
 [![Node.js 20+](https://img.shields.io/badge/node.js-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![CI](https://github.com/viruchith/PhishSlayer/actions/workflows/ci.yml/badge.svg)](https://github.com/viruchith/PhishSlayer/actions/workflows/ci.yml)
 
 ## The idea
 

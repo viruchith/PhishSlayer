@@ -8,7 +8,7 @@ This package is **`phish-slayer-backend`** in the pnpm monorepo ([`../pnpm-works
 
 ## Requirements
 
-- **Node.js** 18+ (ES modules, `node --watch` for dev) and [**pnpm**](https://pnpm.io/installation) (`corepack enable` matches the root `packageManager` pin)
+- **Node.js** 20+ (ES modules, `node --watch` for dev) and [**pnpm**](https://pnpm.io/installation) (`corepack enable` matches the root `packageManager` pin)
 - Network access to `generativelanguage.googleapis.com` when using Gemini (optional for PoC; mock fallback works without a key)
 
 ---
