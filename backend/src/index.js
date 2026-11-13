@@ -5,6 +5,8 @@ import cors from "@fastify/cors";
 import { listEmployeeSummaries, findPersonnelById } from "./mockCmdb.js";
 import { buildMcpContextPayload } from "./mcpBridge.js";
 import { generateSimulationFromContext, isGeminiKeyConfigured } from "./geminiService.js";
+import { checkContentPolicy } from "./contentPolicy.js";
+import { FIELDS_SENT_TO_MODEL } from "./fieldAllowlist.js";
 
 const telemetryStore = [];
 
@@ -141,16 +143,22 @@ fastify.post("/api/simulation/generate", async (request, reply) => {
     return reply.code(404).send(mcpPayload);
   }
   const gen = await generateSimulationFromContext(mcpPayload);
+  const policy = checkContentPolicy(gen.simulation);
   logBackendVerbose("simulation", "generate_done", {
     employeeId,
     source: gen.source,
     reason: gen.reason ?? null,
     model: gen.model ?? null,
+    policyAllowed: policy.allowed,
+    policyRuleId: policy.ruleId,
   });
   return {
     employeeId,
     mcpContext: mcpPayload,
     simulation: gen.simulation,
+    fieldsSentToModel: gen.fieldsSentToModel ?? FIELDS_SENT_TO_MODEL,
+    promptPayload: gen.promptPayload ?? null,
+    contentPolicy: policy,
     serverEnv: {
       geminiKeyConfigured: isGeminiKeyConfigured(),
     },
@@ -186,6 +194,26 @@ fastify.post("/api/telemetry/stage", async (request, reply) => {
     return reply.code(404).send({ error: "NOT_FOUND" });
   }
 
+  const draft = {
+    subject: editedSubject ?? body.subject ?? "",
+    pretext_type: editedPretextType ?? body.pretext_type ?? "",
+    body_html: editedBodyHtml ?? body.body_html ?? "",
+  };
+  const policy = checkContentPolicy(draft);
+  if (!policy.allowed) {
+    logBackendVerbose("telemetry", "stage_blocked_policy", {
+      employeeId,
+      ruleId: policy.ruleId,
+      reason: policy.reason,
+    });
+    return reply.code(422).send({
+      error: "CONTENT_POLICY_BLOCKED",
+      ruleId: policy.ruleId,
+      reason: policy.reason,
+      message: policy.reason,
+    });
+  }
+
   const id = `TX-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const row = {
     id,
@@ -193,9 +221,9 @@ fastify.post("/api/telemetry/stage", async (request, reply) => {
     department: person.department,
     deliveryVector: deliveryVector || person.preferredDeliveryVector || "Email",
     employeeId,
-    subject: editedSubject ?? body.subject ?? "",
-    pretext_type: editedPretextType ?? body.pretext_type ?? "",
-    body_html: editedBodyHtml ?? body.body_html ?? "",
+    subject: draft.subject,
+    pretext_type: draft.pretext_type,
+    body_html: draft.body_html,
     contextualAnchors: Array.isArray(contextualAnchors) ? contextualAnchors : [],
     stagedAt: new Date().toISOString(),
     outcome: "STAGED",

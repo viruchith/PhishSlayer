@@ -22,8 +22,8 @@ Generic phishing templates cause pattern fatigue: people learn “Password expir
 | | Generic | Context-grounded (CMDB-anchored) |
 |---|---|---|
 | Subject | Password Expired — Action Required | `[SIMULATION] DataDog: alert.prod.db.latency on Tachyon Payments Edge` |
-| Body | “Your password expires in 24 hours. Click here to reset.” | Mentions project `PRJ-TACHYON-SRE`, monitor `alert.prod.db.latency`, file `deployment_manifest.yaml`, and the Distinguished Engineer — Runtime role |
-| Grounding | None | Those IDs/names are present on the synthetic record in `backend/src/mockCmdb.js` |
+| Body | “Your password expires in 24 hours. Click here to reset.” | Mock body cites `PRJ-TACHYON-SRE`, monitor `alert.prod.db.latency`, file `deployment_manifest.yaml`, and Marcus Thorne’s role |
+| Grounding | None | Produced by the mock generator; verified with `pnpm run check-grounding` (see `docs/GROUNDING_CHECK_EXAMPLE.txt`) |
 
 Narrative scenario write-ups: [EXAMPLES.md](./EXAMPLES.md). Re-verify locally with `pnpm run check-grounding`.
 
