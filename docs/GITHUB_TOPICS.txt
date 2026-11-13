@@ -1,0 +1,25 @@
+# Suggested GitHub repository topics (apply in Settings → Topics)
+# Extracted from the former README keyword / discovery-tag lists.
+
+phishing-simulation
+spear-phishing
+security-awareness-training
+cyber-resilience
+model-context-protocol
+mcp
+cmdb
+llm
+human-in-the-loop
+social-engineering
+red-team
+blue-team
+google-gemini
+fastify
+preact
+vite
+tailwindcss
+pnpm
+foss
+security-training
+soc
+open-source-security
