@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "concurrently -n backend,frontend -c cyan,magenta \"pnpm --filter phish-slayer-backend dev\" \"pnpm --filter phish-slayer-frontend dev\"",
     "dev:backend": "pnpm --filter phish-slayer-backend dev",
     "dev:frontend": "pnpm --filter phish-slayer-frontend dev",
+    "lint": "pnpm --filter phish-slayer-backend lint && pnpm --filter phish-slayer-frontend lint",
+    "test": "pnpm --filter phish-slayer-backend test",
+    "check-grounding": "pnpm --filter phish-slayer-backend check-grounding",
     "build": "pnpm --filter phish-slayer-frontend build",
     "start:backend": "pnpm --filter phish-slayer-backend start"
   },

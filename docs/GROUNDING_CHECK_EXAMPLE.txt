@@ -1,0 +1,42 @@
+
+> phish-slayer@0.1.0 check-grounding C:\Users\AD36038\Projects\PhishSlayer
+> pnpm --filter phish-slayer-backend check-grounding
+
+
+> phish-slayer-backend@0.1.0 check-grounding C:\Users\AD36038\Projects\PhishSlayer\backend
+> node scripts/check-grounding.js
+
+PHISH SLAYER grounding check (mock provider)
+
+[PASS] EMP-C01 Elena Marquez
+  subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh
+  grounded mentions: projects=PRJ-AURORA-BILL files=gcp_budget_config.json tools=DataDog,Datadog,GCP
+[PASS] EMP-X01 Jordan Blake
+  subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh
+  grounded mentions: projects=PRJ-AURORA-BILL files=gcp_budget_config.json tools=DataDog,Datadog,GCP
+[PASS] EMP-1001 Sarah Jenkins
+  subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh
+  grounded mentions: projects=PRJ-AURORA-BILL files=gcp_budget_config.json tools=DataDog,Datadog,GCP
+[PASS] EMP-1002 Marcus Thorne
+  subject: [SIMULATION] DataDog: alert.prod.db.latency on Tachyon Payments Edge
+  grounded mentions: projects=PRJ-TACHYON-SRE files=deployment_manifest.yaml tools=DataDog,Datadog
+[PASS] EMP-D01 Riley Chen
+  subject: [SIMULATION] DataDog: alert.prod.db.latency on Tachyon Payments Edge
+  grounded mentions: projects=PRJ-TACHYON-SRE files=deployment_manifest.yaml tools=DataDog,Datadog
+[PASS] EMP-1003 Alex Rivera
+  subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh
+  grounded mentions: projects=PRJ-AURORA-BILL files=gcp_budget_config.json tools=DataDog,Datadog,GCP
+[PASS] EMP-1004 Priya Desai
+  subject: [SIMULATION] DataDog: alert.prod.db.latency on Tachyon Payments Edge
+  grounded mentions: projects=PRJ-TACHYON-SRE files=deployment_manifest.yaml tools=DataDog,Datadog
+[PASS] EMP-F01 James Okonkwo
+  subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh
+  grounded mentions: projects=PRJ-AURORA-BILL files=gcp_budget_config.json tools=DataDog,Datadog,GCP
+[PASS] EMP-L01 Morgan Tate
+  subject: [SIMULATION] GitHub check required — PRJ-TRANSIT-OUT / Contractor_Knowledge_Transfer_Checklist.xlsx
+  grounded mentions: projects=PRJ-TRANSIT-OUT files=Contractor_Knowledge_Transfer_Checklist.xlsx tools=GitHub
+[PASS] EMP-L99 Jamie Frost
+  subject: [SIMULATION] GitHub check required — PRJ-METACORE / CMDB_Viewer_Metadata_export.ndjson
+  grounded mentions: projects=PRJ-METACORE files=CMDB_Viewer_Metadata_export.ndjson tools=GitHub
+
+Summary: 10 passed, 0 failed, 10 total
