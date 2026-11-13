@@ -68,6 +68,7 @@ export function App() {
     geminiKeyConfigured: null,
     envSources: [],
   });
+  const [policyBlock, setPolicyBlock] = useState(null);
 
   useEffect(() => {
     clientVerboseLog("info", "app_mount", { href: typeof location !== "undefined" ? location.href : "" });
@@ -147,15 +148,22 @@ export function App() {
       setSubject(data.simulation?.subject ?? "");
       setPretext(data.simulation?.pretext_type ?? "");
       setBodyHtml(data.simulation?.body_html ?? "");
+      setPolicyBlock(
+        data.contentPolicy && data.contentPolicy.allowed === false
+          ? data.contentPolicy
+          : null,
+      );
       clientVerboseLog("info", "generate_done", {
         employeeId: selectedId,
         source: data.generationMeta?.source,
         reason: data.generationMeta?.reason,
+        policyAllowed: data.contentPolicy?.allowed,
       });
     } catch (e) {
       clientVerboseLog("error", "generate_failed", { employeeId: selectedId, message: e.message });
       setGenerateError(e.message);
       setGenResult(null);
+      setPolicyBlock(null);
     } finally {
       setGenerateLoading(false);
     }
@@ -164,7 +172,7 @@ export function App() {
   const anchors = genResult?.mcpContext?.contextualAnchors ?? profile?.contextualAnchors ?? [];
 
   const onApprove = async () => {
-    if (!selectedId) return;
+    if (!selectedId || policyBlock) return;
     setStagingMessage("");
     try {
       await api("/api/telemetry/stage", {
@@ -179,10 +187,20 @@ export function App() {
         }),
       });
       setStagingMessage("Staged for telemetry (no messages were sent).");
+      setPolicyBlock(null);
       clientVerboseLog("info", "telemetry_staged", { employeeId: selectedId });
       refreshTelemetry();
     } catch (e) {
-      setStagingMessage(e.message);
+      if (e.data?.error === "CONTENT_POLICY_BLOCKED") {
+        setPolicyBlock({
+          allowed: false,
+          ruleId: e.data.ruleId,
+          reason: e.data.reason || e.message,
+        });
+        setStagingMessage(e.data.reason || e.message);
+      } else {
+        setStagingMessage(e.message);
+      }
     }
   };
 
@@ -193,7 +211,41 @@ export function App() {
     setPretext("");
     setBodyHtml("");
     setGenerateError("");
+    setPolicyBlock(null);
     setStagingMessage("Discarded local template draft.");
+  };
+
+  const onDraftEdit = (field, value) => {
+    if (field === "subject") setSubject(value);
+    if (field === "pretext") setPretext(value);
+    if (field === "body") setBodyHtml(value);
+    // Re-evaluate local policy cue on edit; server enforces on approve
+    const next = {
+      subject: field === "subject" ? value : subject,
+      pretext_type: field === "pretext" ? value : pretext,
+      body_html: field === "body" ? value : bodyHtml,
+    };
+    const hay = `${next.subject}\n${next.pretext_type}\n${next.body_html}`.toLowerCase();
+    const hits = [
+      ["layoffs", /layoff|laid[\s-]?off|reduction in force|\brif\b/],
+      ["compensation", /bonus|compensation|salary|pay[\s-]?raise|\brsus?\b/],
+      ["health_family", /medical (leave|record|emergency)|family emergency|sick leave|hospitaliz/],
+      ["bereavement", /bereavement|funeral|passed away|condolence/],
+      ["discipline", /disciplinary|performance improvement plan|\bpip\b|termination hearing/],
+      ["legal_immigration", /deport|visa (revok|cancel|expir)|immigration (status|enforcement)|arrest warrant/],
+    ];
+    let blocked = null;
+    for (const [ruleId, re] of hits) {
+      if (re.test(hay)) {
+        blocked = {
+          allowed: false,
+          ruleId,
+          reason: `Content policy may block this draft (${ruleId}). Approval is disabled until revised.`,
+        };
+        break;
+      }
+    }
+    setPolicyBlock(blocked);
   };
 
   const runSimulation = async (row) => {
@@ -216,6 +268,12 @@ export function App() {
 
   return (
     <div class="min-h-screen">
+      <div
+        class="sticky top-0 z-40 border-b border-amber-700/50 bg-amber-950/95 text-amber-100 text-center text-xs sm:text-sm px-3 py-2 font-medium"
+        role="status"
+      >
+        Synthetic data only — all employees and assets are fictional. Nothing is sent to real recipients.
+      </div>
       <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
         <div class="max-w-6xl mx-auto px-4 py-5 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
@@ -224,8 +282,8 @@ export function App() {
             </p>
             <h1 class="text-2xl font-bold text-white">Human-in-the-Loop CASE Dashboard</h1>
             <p class="text-sm text-slate-400 max-w-2xl">
-              Synthetic CMDB → mock MCP bridge → Gemini (with offline fallback) → analyst review → staged
-              telemetry. No email, Slack, or Teams webhooks are dispatched.
+              Synthetic CMDB → mock MCP bridge → Gemini (with offline fallback) → policy check → analyst
+              review → staged telemetry. No email, Slack, or Teams webhooks are dispatched.
             </p>
           </div>
           <div class="flex flex-col gap-2 items-stretch md:items-end shrink-0">
@@ -509,6 +567,19 @@ export function App() {
                     ))}
                   </ul>
                 </div>
+                <div>
+                  <p class="text-xs font-semibold text-slate-500 uppercase mb-2">
+                    Fields sent to the model (allowlist)
+                  </p>
+                  <ul class="text-[10px] font-mono text-slate-400 space-y-0.5 max-h-28 overflow-auto bg-slate-950/80 border border-slate-800 rounded-lg p-2">
+                    {(genResult.fieldsSentToModel ?? []).map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+                  <p class="text-[11px] text-slate-500 mt-1">
+                    Disallowed CMDB fields are dropped at the prompt-building boundary (data minimization demo).
+                  </p>
+                </div>
               </div>
             )}
           </Zone>
@@ -518,12 +589,25 @@ export function App() {
             subtitle="Edit before staging; approval writes to the in-memory telemetry array only."
           >
             <div class="space-y-3">
+              {policyBlock ? (
+                <div
+                  class="rounded-lg border border-red-800/70 bg-red-950/40 px-3 py-2 text-xs text-red-100"
+                  role="alert"
+                >
+                  <p class="font-semibold">Content policy blocked</p>
+                  <p class="mt-1">{policyBlock.reason}</p>
+                  {policyBlock.ruleId ? (
+                    <p class="mt-1 text-red-300/80 font-mono">rule: {policyBlock.ruleId}</p>
+                  ) : null}
+                  <p class="mt-1 text-red-200/80">Approval is disabled until the draft is revised or discarded.</p>
+                </div>
+              ) : null}
               <div>
                 <label class="text-xs font-semibold text-slate-500 uppercase">Subject</label>
                 <input
                   class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
                   value={subject}
-                  onInput={(e) => setSubject(e.currentTarget.value)}
+                  onInput={(e) => onDraftEdit("subject", e.currentTarget.value)}
                 />
               </div>
               <div>
@@ -531,7 +615,7 @@ export function App() {
                 <input
                   class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
                   value={pretext}
-                  onInput={(e) => setPretext(e.currentTarget.value)}
+                  onInput={(e) => onDraftEdit("pretext", e.currentTarget.value)}
                 />
               </div>
               <div>
@@ -539,7 +623,7 @@ export function App() {
                 <textarea
                   class="mt-1 w-full min-h-[140px] rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm font-mono"
                   value={bodyHtml}
-                  onInput={(e) => setBodyHtml(e.currentTarget.value)}
+                  onInput={(e) => onDraftEdit("body", e.currentTarget.value)}
                 />
               </div>
               <div>
@@ -549,7 +633,7 @@ export function App() {
               <div class="flex flex-wrap gap-3 pt-1">
                 <button
                   type="button"
-                  disabled={!genResult}
+                  disabled={!genResult || Boolean(policyBlock)}
                   onClick={onApprove}
                   class="rounded-lg bg-emerald-500/90 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-40"
                 >

@@ -1,219 +1,86 @@
-# PHISH SLAYER — Open-Source Context-Aware Phishing Simulation Framework
+# PHISH SLAYER
 
-<!-- Indexing helpers: phishing simulation framework, spear phishing simulation, security awareness training SAT, cyber resilience, Model Context Protocol MCP, CMDB integration, LLM security training, human in the loop HITL, red team blue team, social engineering simulation, Google Gemini, Fastify API, Preact Vite -->
+Can an LLM, grounded in internal asset context, produce more realistic phishing simulations and better training debriefs — with a human reviewing everything?
+
+**Status:** Proof of concept / research idea. Not production software.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE)
-[![pnpm workspace](https://img.shields.io/badge/managed%20with-pnpm-C93897?logo=pnpm&logoColor=white)](https://pnpm.io)
-[![Node.js 18+](https://img.shields.io/badge/node.js-%3E%3D18-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Backend: Fastify](https://img.shields.io/badge/backend-Fastify-000000?logo=fastify&logoColor=white)](https://fastify.dev/)
-[![Frontend: Vite](https://img.shields.io/badge/bundle-Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![UI: Preact](https://img.shields.io/badge/UI-Preact-673AB8?logo=preact&logoColor=white)](https://preactjs.com/)
-[![Tailwind CSS](https://img.shields.io/badge/styles-Tailwind-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Google Gemini](https://img.shields.io/badge/LLM-Google%20Gemini-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
-[![Docs: MCP architecture](https://img.shields.io/badge/docs-MCP%20architecture-111827?logo=readthedocs&logoColor=white)](./MCP_ARCHITECTURE.md)
-[![Scenario examples](https://img.shields.io/badge/docs-scenario%20examples-111827?logo=readthedocs&logoColor=white)](./EXAMPLES.md)
+[![Node.js 20+](https://img.shields.io/badge/node.js-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![CI](https://github.com/viruchith/PhishSlayer/actions/workflows/ci.yml/badge.svg)](https://github.com/viruchith/PhishSlayer/actions/workflows/ci.yml)
 
-![PHISH SLAYER — context-aware phishing simulation and security awareness training platform cover image](coverimage.png)
+## The idea
 
-> **SEO summary:** **PHISH SLAYER** is a free and open-source (**FOSS**) **context-aware phishing simulation** and **security awareness training** framework. It combines **Large Language Models (LLMs)** (including **Google Gemini**), the **Model Context Protocol (MCP)** for tool-style **CMDB** reads, and **human-in-the-loop** review to produce **hyper-personalized spear-phishing simulations**, analyst dashboards, and **measurable cyber-resilience** outcomes (reporting, click-through, and time-to-report signals)—without replacing production **phishing simulation platforms** wholesale, but demonstrating how **AI-assisted SAT** can stay grounded in **enterprise asset** and **identity context**.
+Generic phishing templates cause pattern fatigue: people learn “Password expired” and “HR policy update,” not how real attackers work. Real attackers use context — project names, tools, colleagues. This repo explores whether a synthetic CMDB plus an LLM can generate simulations that stay grounded in that metadata, while a human analyst must approve every draft before anything is staged. Nothing is sent to real recipients.
 
-**Keywords:** phishing simulation, spear-phishing simulation, security awareness training (SAT), cyber resilience, Model Context Protocol, MCP, CMDB integration, AI security training, open-source security platform, human-in-the-loop security, social engineering simulation, red team / blue team training, SOC enablement, Google Gemini, Fastify, Preact, Vite, Tailwind CSS, pnpm monorepo
+## See it in action
 
-**Repository overview (for search & contributors):** Monorepo **pnpm** workspace (`pnpm-workspace.yaml`) with a **Fastify** **Node.js** backend (synthetic CMDB, mock MCP context, `/api` routes, optional Gemini generation) and a **Preact + Vite + Tailwind** single-page **analyst dashboard** for CASE (**Context-Aware Simulation Engine**) workflows. See [Backend runbook](./backend/README.md) and [Frontend runbook](./frontend/README.md).
+![Demo placeholder](docs/demo.gif)
 
-## Primary Use Cases
+<!-- TODO (maintainer): record a short demo GIF of generate → review → stage and replace docs/demo.gif -->
 
-- Build context-aware phishing simulation campaigns using CMDB metadata.
-- Run spear-phishing awareness programs with human-in-the-loop ethical review.
-- Measure security behavior improvements with telemetry-driven KPIs (CTR, TTR, reporting rates).
-- Integrate security simulations with enterprise tools like ServiceNow, Jira Service Management, Slack, and Microsoft Teams.
-- Deploy an open-source alternative to commercial phishing simulation platforms with customizable LLM backends.
+**Generic template** vs **context-grounded draft** (fields taken from the synthetic CMDB for `EMP-1002` / Marcus Thorne — `PRJ-TACHYON-SRE`):
 
-## Contributor discovery tags
+| | Generic | Context-grounded (CMDB-anchored) |
+|---|---|---|
+| Subject | Password Expired — Action Required | `[SIMULATION] DataDog: alert.prod.db.latency on Tachyon Payments Edge` |
+| Body | “Your password expires in 24 hours. Click here to reset.” | Mock body cites `PRJ-TACHYON-SRE`, monitor `alert.prod.db.latency`, file `deployment_manifest.yaml`, and Marcus Thorne’s role |
+| Grounding | None | Produced by the mock generator; verified with `pnpm run check-grounding` (see `docs/GROUNDING_CHECK_EXAMPLE.txt`) |
 
-enterprise phishing simulation, CMDB-driven spear phishing, MCP read-only context bridge, security behavior analytics, phishing awareness KPIs, gamified security training, FOSS SAT alternative, LLM red teaming ethics, synthetic employee CMDB, telemetry staging dashboard
+Narrative scenario write-ups: [EXAMPLES.md](./EXAMPLES.md). Re-verify locally with `pnpm run check-grounding`.
 
-## Documentation Map
+## What the PoC does / does not do
 
-- [Project Architecture (MCP)](MCP_ARCHITECTURE.md) - full MCP-native system design, tools/resources/prompts model, and security controls.
-- [Simulation Scenario Examples](EXAMPLES.md) - high-fidelity context-aware phishing and social engineering simulation examples.
-- [Project Proposal (this document)](README.md) - vision, roadmap, stack, and implementation strategy.
-- [**Backend PoC — runbook & API**](backend/README.md) - Fastify service, env, routes, logging, troubleshooting.
-- [**Frontend PoC — runbook & UI**](frontend/README.md) - Preact/Vite dashboard, proxy, build, client logging.
+**Does**
 
-## Interactive PoC prototype (CASE + mock MCP)
+- Synthetic CMDB (fictional employees, projects, assets)
+- Mock MCP context route (`GET /api/mcp/context/:employeeId`)
+- Gemini generation with automatic mock fallback (no API key required)
+- Analyst review dashboard (edit / approve / discard)
+- In-memory telemetry staging (cleared on process restart)
 
-This repository includes a **local, read-only proof-of-concept**: Fastify backend (`/backend`) with a synthetic CMDB, a mock MCP context route, Google **Gemini 2.5 Flash** (`gemini-2.5-flash` by default; override with `GEMINI_MODEL`) generation (with automatic mock fallback), and a **Preact + Tailwind** analyst dashboard (`/frontend`). Nothing is emailed or posted to Slack/Teams; approved items are stored in an in-memory telemetry array only.
+**Does not**
 
-**Quick start**
+- Send email, Slack, Teams, or any real messages
+- Connect to real CMDBs or identity systems
+- Persist data to a database
+- Authenticate users
+- Measure real behavior change
 
-1. Enable Corepack (ships with Node 16.13+): `corepack enable` — then install dependencies from the repo root: `pnpm install`
-2. Optional: copy [`.env.example`](.env.example) to `.env` and set `GEMINI_API_KEY` (the UI still works end-to-end without it).
-3. Run both servers: `pnpm run dev`  
-   - Backend: [http://127.0.0.1:8787/api/health](http://127.0.0.1:8787/api/health)  
-   - Frontend (Vite): [http://127.0.0.1:5173](http://127.0.0.1:5173) (proxies `/api` to the backend)  
-4. **Verbose logs (JSON lines):** `logs/backend.log` (HTTP hooks, Gemini, telemetry) and `logs/frontend.log` (browser events posted to `POST /api/client-log`). The `logs/` directory is created automatically and is gitignored.
+## Quick start
 
-**Other scripts:** `pnpm run dev:backend`, `pnpm run dev:frontend`, `pnpm run build` (frontend production build). The repo uses **pnpm** workspaces ([`pnpm-workspace.yaml`](pnpm-workspace.yaml)); lockfile is [`pnpm-lock.yaml`](pnpm-lock.yaml).
+Requires Node.js 20+ and [pnpm](https://pnpm.io/) (`corepack enable`).
 
-## Table of Contents
+```bash
+pnpm install
+pnpm run dev
+```
 
-1. [Executive Summary](#executive-summary)
-2. [Problem Statement](#1-problem-statement)
-3. [Existing Systems and Limitations](#2-existing-systems--limitations)
-4. [Proposed System: PHISH SLAYER](#3-proposed-system-phish-slayer)
-5. [System Architecture](#4-system-architecture)
-6. [Technology Stack](#5-technology-stack)
-7. [Advantages and Value Proposition](#6-advantages--value-proposition)
-8. [Implementation Roadmap](#7-implementation-roadmap)
-9. [Project Team and Expertise](#8-project-team--expertise)
-10. [Success Metrics and KPIs](#9-success-metrics--key-performance-indicators-kpis)
-11. [Future Enhancements](#10-future-enhancements)
-12. [Related Technical Documents](#related-technical-documents)
-13. [FAQ (Implementation and Security)](#faq-implementation-and-security)
+- Frontend: http://127.0.0.1:5173  
+- Backend health: http://127.0.0.1:8787/api/health  
 
-## FAQ (Implementation and Security)
+Optional: copy [`.env.example`](./.env.example) to `.env` and set `GEMINI_API_KEY`. Without a key, generation uses the local mock scenario end-to-end.
 
-### Is PHISH SLAYER production-ready today?
-PHISH SLAYER is currently positioned as a project proposal and architecture blueprint. The phased roadmap in this document outlines the path from foundation and connector development to pilot deployment and open-source release.
+Other scripts: `pnpm run lint` · `pnpm run test` · `pnpm run build` · `pnpm run check-grounding`
 
-### What data is sent to the LLM?
-The design uses context minimization: only necessary professional metadata is passed to generation workflows. Sensitive content and PII are intentionally excluded, masked, or redacted based on policy and consent controls.
+## Open questions / hypotheses
 
-### How is consent enforced?
-Consent is enforced through auditable access workflows and immutable tracking references. In the MCP design, every sensitive data access action is tied to explicit approval context and compliance controls.
+- Do context-grounded lures change report/click behavior vs well-made generic lures?
+- Does a specific debrief (“here is the verifiable red flag”) beat generic training?
+- Does grounding reduce LLM hallucination of internal details, and can that be checked automatically?
+- Is a CMDB the right context source, or are trackers / directories / calendars better?
+- Where does personalization cross ethical lines?
 
-### Does PHISH SLAYER support human review before sending simulations?
-Yes. The architecture includes a mandatory human-in-the-loop review gate where security analysts can approve, edit, or reject AI-generated simulation narratives before dispatch.
+See [docs/HYPOTHESES.md](./docs/HYPOTHESES.md) for a lightweight evaluation protocol.
 
-### Which systems can PHISH SLAYER integrate with?
-Planned integrations include CMDB and service-management ecosystems such as ServiceNow and Jira Service Management, with dispatch support for email, Slack, and Microsoft Teams.
+## Limitations and responsible use
 
-### Where can I see protocol details and realistic scenarios?
-For protocol and security design, see [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md). For campaign-style examples, see [EXAMPLES.md](EXAMPLES.md).
+All employees and assets in this repo are synthetic. Do not run simulations against real people without explicit organizational authorization. Employee-monitoring and privacy laws (and works-council rules) vary by jurisdiction; this project is not legal advice. See [docs/RESPONSIBLE_USE.md](./docs/RESPONSIBLE_USE.md) and [docs/THREAT_MODEL.md](./docs/THREAT_MODEL.md).
 
-## **Project Proposal: PHISH SLAYER**
+## Docs
 
-**An Open-Source Framework for Context-Aware Security Resilience**
+- [Concept & design exploration](./docs/CONCEPT.md)
+- [MCP notes (PoC mock)](./MCP_ARCHITECTURE.md)
+- [Scenario examples](./EXAMPLES.md)
+- [Backend runbook](./backend/README.md) · [Frontend runbook](./frontend/README.md)
 
-## **Executive Summary**
-
-Traditional security awareness training relies on static, generic templates that fail to prepare employees for modern, highly targeted cyber-attacks. **PHISH SLAYER** is a Free and Open-Source Software (FOSS) project designed to bridge this gap. By integrating Large Language Models (LLMs) with the Model Context Protocol (MCP) to securely query internal Configuration Management Databases (CMDB), PHISH SLAYER automates the creation of hyper-personalized, context-aware social engineering simulations. This project aims to democratize enterprise-grade spear-phishing defense, transforming passive compliance training into active cyber resilience.
-
-For the full protocol-level blueprint, see [MCP Architecture](MCP_ARCHITECTURE.md). For practical simulation narratives, see [Scenario Examples](EXAMPLES.md).
-
----
-
-## **1\. Problem Statement**
-
-The human element remains the most vulnerable layer in enterprise security. However, the methods used to train this layer are severely outdated:
-
-* **Pattern Fatigue:** Employees quickly learn to identify generic phishing templates (e.g., "Password Expired," "HR Policy Update"), leading to a false sense of security and a "check-the-box" mentality.  
-* **The Spear-Phishing Reality:** Modern threat actors do not use generic templates. They utilize Open Source Intelligence (OSINT) and compromised internal data to craft highly specific attacks referencing actual projects, assets, and colleagues.  
-* **The Scaling Bottleneck:** Security teams lack the bandwidth to manually research and craft hyper-personalized spear-phishing simulations for every department, team, or individual in an organization.
-
-## **2\. Existing Systems & Limitations**
-
-Current commercial and open-source phishing simulation platforms suffer from critical limitations:
-
-* **Static Template Libraries:** They rely on predefined scenarios that lack contextual relevance to the user’s actual daily workflow.  
-* **Data Isolation:** Existing tools do not natively interface with internal asset management or HR systems, meaning they cannot dynamically leverage real-time company metadata.  
-* **Punitive Focus:** Many systems flag employees who "fail" without providing immediate, constructive, and scenario-specific learning, fostering resentment rather than resilience.
-
-## **3\. Proposed System: PHISH SLAYER**
-
-![Phish Slayer Architecture](phish_slayer_architecture.jpeg)
-
-PHISH SLAYER introduces the **Context-Aware Simulation Engine (CASE)**. Instead of relying on templates, the system dynamically generates scenarios based on an employee's real-time professional environment.
-
-To review concrete simulation outputs generated from this approach, visit [EXAMPLES.md](EXAMPLES.md).
-
-The core philosophy is to use the attackers' weapons—**Intelligence and Context**—to build a resilient workforce. By referencing real project IDs, actual linked software assets, and verifiable personnel hierarchies, the simulations test critical thinking and verification protocols rather than simple pattern recognition.
-
-## **4\. System Architecture**
-
-The architecture is divided into four secure, modular layers:
-
-### **Layer 1: Input & Data Context (The Source)**
-
-* **CMDB Integration:** The system connects to the organization's Configuration Management Database or Application Lifecycle Management tools.  
-* **Secure Querying:** Using read-only API access, it retrieves "Contextual Anchors" (e.g., active Project IDs, Lead Developers, specific file names like `schema_v4.pdf`).
-
-### **Layer 2: Core Processing (The CASE Engine)**
-
-* **Model Context Protocol (MCP) Bridge:** Acts as the secure, standardized connective tissue between the internal data source and the AI intelligence.  
-* **LLM Intelligence:** A Large Language Model processes the contextual anchors and synthesizes a bespoke communication (email, Slack, or Teams message) that perfectly mimics the company’s internal professional tone.
-
-The protocol-level design and JSON-RPC MCP primitives are documented in [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md).
-
-### **Layer 3: Control & Dispatch (The Guardrails)**
-
-* **Human-in-the-Loop:** A mandatory review gate where a Security Analyst approves or edits the AI-generated narrative to ensure ethical compliance and professional boundaries.  
-* **Simulation Dispatch Server:** Routes the approved simulation through managed email gateways or collaboration app integrations.
-
-### **Layer 4: Delivery & Learning Loop (The "Glory Kill")**
-
-* **Telemetry Dashboard:** Tracks engagement, recognition, and failure rates across specific departments.  
-* **Positive Learning Module:** If an employee clicks a malicious link, they are instantly redirected to a brief, non-punitive, interactive module that deconstructs the specific context-aware attack they just experienced.
-
-## **5\. Technology Stack**
-
-As a FOSS project, the stack emphasizes modularity and community-driven standards:
-
-* **Intelligence:** Modular LLM support (e.g., Meta Llama 3, Anthropic Claude, OpenAI GPT-4) to allow organizations to use self-hosted or cloud-based models.  
-* **Data Integration Bridge:** Model Context Protocol (MCP) for secure, standardized tool usage and data fetching.  
-* **Target CMDB Integrations:** Initial API connectors built for major platforms like ServiceNow, Jira Service Management, and Device42.  
-* **Backend / Dispatch:** Python or Node.js core logic; SMTP relays for email; Webhooks/APIs for Slack and Microsoft Teams integration.
-
-## **6\. Advantages & Value Proposition**
-
-* **Hyper-Personalization at Scale:** Automates the creation of thousands of unique, context-rich scenarios without requiring an army of security analysts.  
-* **Enhanced Security & Privacy:** The MCP bridge is read-only. The LLM only receives necessary metadata (professional identifiers), ensuring no Personally Identifiable Information (PII) or sensitive intellectual property is ever stored in the model's training memory.  
-* **Cost-Effective (FOSS):** Eliminates vendor lock-in and expensive per-seat licensing fees associated with legacy simulation platforms.  
-* **Cultural Shift:** Transforms security training from an annoying compliance task into an engaging, intellectually stimulating challenge that fosters a proactive defense culture.
-
-## **7\. Implementation Roadmap**
-
-* **Phase 1: Foundation (Months 1-2):** Develop the core CASE Engine logic and the first set of MCP connectors for standard CMDB environments.  
-* **Phase 2: Narrative & Guardrails (Months 3-4):** Engineer the LLM prompt structures for specific corporate tones and finalize the Human-in-the-Loop review UI.  
-* **Phase 3: The Learning Loop (Months 5-6):** Develop the dispatch mechanisms and the interactive, positive learning modules for "failed" tests.  
-* **Phase 4: Pilot & FOSS Release (Month 7+):** Run internal pilots with highly technical departments (e.g., DevOps), refine based on telemetry, and officially launch the open-source repository to the community.
-
-## **8\. Project Team & Expertise**
-
-The successful execution of PHISH SLAYER requires a multidisciplinary team combining deep expertise in cyber security, modern software architecture, and AI/ML model deployment.
-
-| Role | Key Responsibilities | Required Expertise |
-| :---- | :---- | :---- |
-| **Project Lead / Security Architect** | Overall project strategy, FOSS governance, securing the MCP bridge and CMDB integrations. | Enterprise Security, Penetration Testing, Risk Management, Python. |
-| **AI/ML Engineer** | Developing and optimizing the LLM prompt structures, ensuring contextual synthesis is realistic and secure. | Prompt Engineering, Natural Language Processing, LLM deployment (e.g., Llama 3, Claude). |
-| **Full Stack Developer** | Building the Human-in-the-Loop review UI, Telemetry Dashboard, and positive learning modules. | Svelte/React (Frontend), Node.js/Java (Backend), Database integration (e.g., PostgreSQL). |
-| **DevOps / Release Manager** | Setting up secure CI/CD pipelines, managing containerization (Docker/Kubernetes), and managing the public FOSS repository. | Cloud Infrastructure (AWS/Azure/GCP), CI/CD, Infrastructure as Code (Terraform). |
-
-## **9\. Success Metrics & Key Performance Indicators (KPIs)**
-
-The success of PHISH SLAYER will be measured not by the number of "failures," but by the verifiable increase in employee resilience and security awareness maturity.
-
-| Category | KPI | Target Goal (Post-Pilot) | Measurement Method |
-| :---- | :---- | :---- | :---- |
-| **Efficacy** | Reduction in Click-Through Rate (CTR) for context-aware simulations. | 50% Reduction over 6 months | Telemetry Dashboard tracking compared to baseline generic simulations. |
-| **Resilience** | Time to Report (TTR) a suspected malicious message. | Decrease TTR by 30% | Tracking timestamp from simulation dispatch to employee action (report/block). |
-| **Adoption** | Number of deployed organizations and active contributors to the FOSS project. | 5+ Enterprise Deployments; 10+ Active Community Contributors | GitHub repository metrics and community engagement reports. |
-| **Security** | Zero instances of PII/Sensitive Data exposure via the LLM/MCP. | 100% Compliance | Formal security audit and penetration testing of the MCP layer. |
-
-## **10\. Future Enhancements**
-
-Following the initial FOSS release, future iterations of PHISH SLAYER will focus on expanding its simulation capabilities and integration footprint.
-
-* **Multi-Channel Simulations:** Expanding beyond email to include voice (vishing) and SMS (smishing) simulations, integrating context from HR systems to identify personal contact vectors.  
-* **Automated Remediation Workflows:** Building connectors to ticketing systems (e.g., Jira, Zendesk) to automatically create incident response tickets when a user reports a successful simulation.  
-* **Dynamic Difficulty Scaling:** Implementing an adaptive system that increases the contextual complexity and subtlety of simulations based on an individual or department's consistent success rate.
-
----
-
-## Related Technical Documents
-
-- [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md): Detailed universal MCP application architecture for PHISH SLAYER, including tools, resources, prompts, security controls, and JSON-RPC execution flows.
-- [EXAMPLES.md](EXAMPLES.md): Realistic context-aware spear-phishing and social engineering simulation examples covering cloud, CI/CD, and internal collaboration attack patterns.
-
-If you are implementing the platform, start with [MCP_ARCHITECTURE.md](MCP_ARCHITECTURE.md). If you are designing training campaigns, start with [EXAMPLES.md](EXAMPLES.md).
+Licensed under [GPL-3.0](./LICENSE). The maintainer may revisit licensing later.

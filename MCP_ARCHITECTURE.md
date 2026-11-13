@@ -1,17 +1,28 @@
-# PHISH SLAYER: Universal MCP Application Architecture
-**Version:** 1.0 | **Protocol:** MCP v1.0 (JSON-RPC 2.0) | **License:** FOSS (Apache 2.0/MIT)
-**Mission:** Bridge LLMs and enterprise CMDBs securely to automate hyper-personalized, context-aware spear-phishing simulations and transform compliance into active cyber resilience.
+# PHISH SLAYER: MCP architecture notes (concept + PoC)
 
-**Related Docs:** [Project Overview](README.md) | [Simulation Scenarios](EXAMPLES.md)
+**Status:** Design exploration. The running PoC exposes a **mock** context HTTP route (`GET /api/mcp/context/:employeeId`), not a full MCP JSON-RPC server. License for this repository is **GPL-3.0** (see [LICENSE](./LICENSE)); older draft text below that mentioned Apache/MIT referred to a packaging idea only.
+
+**Related Docs:** [README](README.md) | [Concept](docs/CONCEPT.md) | [Examples](EXAMPLES.md) | [Threat model](docs/THREAT_MODEL.md)
 
 ---
 
-## 1. Architectural Overview
-**Core Principles:**
-- **Zero-Trust Data Flow:** LLMs never directly access CMDB. MCP Server acts as a validated, audited proxy.
-- **Context Minimization:** Only strictly necessary attributes are injected into LLM context windows.
-- **Consent & Audit First:** Every query, generation, and deployment carries a cryptographically verifiable audit trail.
-- **MCP-Native:** Implements `tools`, `resources`, and `prompts` per MCP v1.0 spec over `stdio` or `HTTP/SSE`.
+## Why MCP?
+
+**When MCP adds value:** reusable connectors with a standard `tools` / `resources` / `prompts` interface so multiple clients (IDE agents, automation, this simulator) can share the same CMDB adapter without inventing a one-off API per consumer.
+
+**When a plain internal API is enough:** a single application that only needs one context fetch. The PoC could have used a private function alone; the mock route exists to *shape* the idea of a protocol boundary.
+
+**What this repo implements:** `buildMcpContextPayload` + `GET /api/mcp/context/:id` over the synthetic CMDB. No stdio MCP server, no consent IDs, no real CMDB adapters.
+
+---
+
+## 1. Architectural Overview (vision)
+
+**Core Principles (design goals — mostly Idea only in the PoC):**
+- **Zero-Trust Data Flow:** LLMs never directly access CMDB. A bridge acts as a validated proxy. *(PoC: in-process mock.)*
+- **Context Minimization:** Only allowlisted attributes reach the prompt. *(PoC: implemented at the prompt-building boundary.)*
+- **Consent & Audit First:** Sensitive access should be approved and logged. *(PoC: not enforced — see FAQ in CONCEPT.md.)*
+- **MCP-Native (vision):** `tools`, `resources`, and `prompts` over `stdio` or `HTTP/SSE`. *(PoC: mock HTTP only.)*
 
 ---
 
@@ -157,28 +168,27 @@ Reusable, parameterized prompt templates that enforce security guardrails, tone,
 
 ---
 
-## 5. Implementation Blueprint
+## 5. Implementation blueprint
 
-### 5.1 Stack Recommendations
-- **Language:** Python 3.11+ (FastMCP library) or Node.js (MCP SDK)
-- **Transport:** `stdio` (local CLI/IDE) + `HTTP/SSE` (cloud/enterprise)
-- **CMDB Connector:** Pluggable adapters (ServiceNow, Jira Service Management, ConfigMgr, custom REST/GraphQL)
-- **LLM Orchestrator:** LangChain/LlamaIndex with strict schema output + Guardrails AI
-- **Storage:** PostgreSQL (audit/metrics), Redis (caching/rate limiting)
-- **Deployment:** Docker Compose / Kubernetes Helm Chart
+### 5.1 What the PoC uses today
+- **Language / runtime:** Node.js (Fastify) — see `/backend`
+- **UI:** Preact + Vite + Tailwind — see `/frontend`
+- **LLM:** Google Gemini with mock fallback (`backend/src/geminiService.js`)
+- **Context:** Synthetic CMDB + mock bridge (`mockCmdb.js`, `mcpBridge.js`)
 
-### 5.1 FOSS Packaging
+### 5.2 Possible later (Idea only)
+- Real MCP SDK server (Node or Python), `stdio` / `HTTP/SSE`
+- Pluggable CMDB adapters (ServiceNow, Jira Service Management, custom REST)
+- Other LLM providers or local models
+- Persistent audit store, Redis rate limits, container packaging
+
+### 5.3 Example packaging sketch (Idea only — not this repo’s layout)
 ```
-/phish-slayer-mcp/
-├── src/
-│   ├── server.py          # FastMCP implementation
-│   ├── cmdb_adapters/     # Pluggable CMDB connectors
-│   ├── security/          # PII redaction, RBAC, audit
-│   └── prompts/           # JSON prompt templates
-├── tests/
-├── helm/                  # K8s deployment
-├── docker-compose.yml
-└── LICENSE                # Apache 2.0
+/phish-slayer-mcp/          # hypothetical package
+├── src/server.(js|py)
+├── cmdb_adapters/
+├── security/
+└── prompts/
 ```
 
 ---
@@ -204,15 +214,13 @@ Reusable, parameterized prompt templates that enforce security guardrails, tone,
 
 ---
 
-## 7. Roadmap to Industry Standard Adoption
+## 7. If this were taken further (no dates)
 
-| Phase | Deliverable |
-|-------|-------------|
-| **v0.5 (Alpha)** | Core MCP server, CMDB adapter (ServiceNow), 3 tools, basic audit |
-| **v1.0 (GA)** | Full tool/resource/prompt suite, NIST alignment, FOSS release, Helm chart |
-| **v1.5** | Multi-CMDB federation, OpenTelemetry integration, bias-mitigated debriefs |
-| **v2.0** | Industry certification readiness, MITRE ATT&CK live mapping, SCIM/IdP native |
+- Stand up a real MCP server that wraps the allowlisted context builder  
+- One production CMDB adapter behind read-only credentials  
+- Wire generation into an existing simulation platform’s draft API (not a full dispatch stack here)  
+- Formal evaluation of grounding + policy gates (see [HYPOTHESES.md](docs/HYPOTHESES.md))  
 
 ---
 
-**Final Note:** This architecture strictly adheres to MCP v1.0 while embedding enterprise security, compliance, and FOSS transparency. By treating CMDB data as a *secure, consent-bound context stream* rather than raw input, PHISH SLAYER delivers personalized simulations without compromising privacy, enabling organizations to shift from checkbox compliance to measurable cyber resilience.
+**Final note:** Treat sections 2–4 and the JSON-RPC examples as a **vision** for how an MCP-native design *could* look. The honest runtime picture is: synthetic CMDB → mock context route → allowlisted prompt → LLM/mock → policy → human review → in-memory telemetry.
