@@ -45,7 +45,7 @@ export function clientVerboseLog(level, message, context = {}) {
   };
   if (import.meta.env?.DEV) {
     const fn = level === "error" ? console.error : level === "warn" ? console.warn : console.debug;
-    fn.call(console, "[PhishSlayer]", message, context);
+    fn.call(console, "[Phish4Good]", message, context);
   }
   buffer.push(row);
   if (buffer.length > MAX_BUFFER) buffer.splice(0, buffer.length - MAX_BUFFER);

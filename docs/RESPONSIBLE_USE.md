@@ -1,6 +1,6 @@
 # Responsible use
 
-PHISH SLAYER is a **proof of concept** for researching context-grounded security-awareness simulations. It is not authorization to phish anyone.
+Phish4Good is a **proof of concept** for researching context-grounded security-awareness simulations. It is not authorization to phish anyone.
 
 ## Authorization
 

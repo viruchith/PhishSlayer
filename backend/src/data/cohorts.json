@@ -1,0 +1,32 @@
+[
+  {
+    "cohortId": "COH-ALL-STAFF",
+    "name": "All staff (Outlook / Exchange)",
+    "description": "Employees who use Outlook and Exchange Online for day-to-day email.",
+    "roles": ["all_staff", "knowledge_worker"]
+  },
+  {
+    "cohortId": "COH-PLATFORM",
+    "name": "Platform / DevOps / SRE",
+    "description": "Engineers who operate web servers, Kubernetes, and edge infrastructure.",
+    "roles": ["platform", "devops", "sre"]
+  },
+  {
+    "cohortId": "COH-APPDEV",
+    "name": "Application developers / web hosting",
+    "description": "Teams that build and host PHP and other web applications.",
+    "roles": ["app_dev", "web_hosting"]
+  },
+  {
+    "cohortId": "COH-FINANCE",
+    "name": "Finance / FinOps",
+    "description": "Employees who handle billing, invoices, and cloud cost governance.",
+    "roles": ["finance", "finops"]
+  },
+  {
+    "cohortId": "COH-HELPDESK",
+    "name": "IT Helpdesk",
+    "description": "First-line IT support and service-desk operators.",
+    "roles": ["helpdesk", "it_support"]
+  }
+]

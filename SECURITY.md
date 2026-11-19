@@ -1,6 +1,6 @@
 # Security policy
 
-PHISH SLAYER is a local proof of concept. Do not expose the API or UI to untrusted networks.
+Phish4Good is a local proof of concept. Do not expose the API or UI to untrusted networks.
 
 ## Reporting a vulnerability
 

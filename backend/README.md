@@ -1,8 +1,8 @@
-# PHISH SLAYER — Backend (Fastify)
+# Phish4Good — Backend (Fastify)
 
-Node.js **Fastify** service for the PHISH SLAYER proof-of-concept: **read-only mock CMDB**, simulated **MCP context** bridge, **Google Gemini** narrative generation (with offline mock fallback), **human-in-the-loop** staging metadata, and **verbose JSON file logging**.
+Node.js **Fastify** service for the Phish4Good proof-of-concept: **read-only mock CMDB**, simulated **MCP context** bridge, **Google Gemini** narrative generation (with offline mock fallback), **human-in-the-loop** staging metadata, and **verbose JSON file logging**.
 
-This package is **`phish-slayer-backend`** in the pnpm monorepo ([`../pnpm-workspace.yaml`](../pnpm-workspace.yaml), root [`../package.json`](../package.json)).
+This package is **`phish4good-backend`** in the pnpm monorepo ([`../pnpm-workspace.yaml`](../pnpm-workspace.yaml), root [`../package.json`](../package.json)).
 
 ---
 

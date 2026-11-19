@@ -1,5 +1,5 @@
 /**
- * Rich synthetic CMDB for PHISH SLAYER — Enterprise Asset Management & dependency mesh.
+ * Rich synthetic CMDB for Phish4Good — Enterprise Asset Management & dependency mesh.
  * Interconnects departments, personnel hierarchy, multi-cloud tooling, CI/CD, finance/legal,
  * and five scenario profiles (budget spill, DevOps outage, secret-in-CI, contractor offboarding, CMDB sync).
  * All identifiers are fictional; no real org data.
@@ -118,6 +118,7 @@ export const mockCmdb = {
       emotionalArchetype: "portfolio_risk_ownership",
       primaryTechTheme: "multi_cloud_governance",
       simulationHooks: ["Board-level cost narratives", "Cross-cloud reserved capacity commitments"],
+      cohortIds: ["COH-ALL-STAFF", "COH-PLATFORM"],
     },
     {
       employeeId: "EMP-X01",
@@ -140,6 +141,7 @@ export const mockCmdb = {
       emotionalArchetype: "board_visibility_stress",
       primaryTechTheme: "portfolio_governance",
       simulationHooks: ["Revenue-impacting outage language"],
+      cohortIds: ["COH-ALL-STAFF"],
     },
     {
       employeeId: "EMP-1001",
@@ -162,6 +164,7 @@ export const mockCmdb = {
       emotionalArchetype: "responsibility_overload",
       primaryTechTheme: "multi_cloud_ops",
       simulationHooks: ["SOC2 adjacent delivery pressure", "Cross-team dependency mapping"],
+      cohortIds: ["COH-ALL-STAFF", "COH-PLATFORM", "COH-HELPDESK"],
     },
     {
       employeeId: "EMP-1002",
@@ -184,6 +187,7 @@ export const mockCmdb = {
       emotionalArchetype: "hero_complex_burnout",
       primaryTechTheme: "kubernetes_gitops",
       simulationHooks: ["Primary on-call for payments edge", "GitHub CODEOWNER for critical paths"],
+      cohortIds: ["COH-ALL-STAFF", "COH-PLATFORM", "COH-APPDEV"],
     },
     {
       employeeId: "EMP-D01",
@@ -206,6 +210,7 @@ export const mockCmdb = {
       emotionalArchetype: "pipeline_guardian",
       primaryTechTheme: "cicd_supply_chain",
       simulationHooks: ["Owns OIDC trust between GHA and GCP WIF", "Secrets scanning policy exceptions"],
+      cohortIds: ["COH-ALL-STAFF", "COH-PLATFORM"],
     },
     {
       employeeId: "EMP-1003",
@@ -230,6 +235,7 @@ export const mockCmdb = {
       emotionalArchetype: "contractor_inclusion_anxiety",
       primaryTechTheme: "data_handoff_paths",
       simulationHooks: ["Imminent offboarding — knowledge transfer windows", "Shared drive ACL cleanup"],
+      cohortIds: ["COH-ALL-STAFF", "COH-APPDEV"],
     },
     {
       employeeId: "EMP-1004",
@@ -252,6 +258,7 @@ export const mockCmdb = {
       emotionalArchetype: "procedure_pride",
       primaryTechTheme: "observability_sre",
       simulationHooks: ["Datadog SLO burn alerts", "Runbook version discipline"],
+      cohortIds: ["COH-ALL-STAFF", "COH-PLATFORM"],
     },
     {
       employeeId: "EMP-F01",
@@ -274,6 +281,7 @@ export const mockCmdb = {
       emotionalArchetype: "quarter_close_pressure",
       primaryTechTheme: "finops_billing",
       simulationHooks: ["Billing anomaly committee", "CFO readout decks"],
+      cohortIds: ["COH-ALL-STAFF", "COH-FINANCE"],
     },
     {
       employeeId: "EMP-L01",
@@ -296,6 +304,7 @@ export const mockCmdb = {
       emotionalArchetype: "regulatory_scrutiny",
       primaryTechTheme: "data_residency",
       simulationHooks: ["Subprocessor change notices", "DPA amendment cycles"],
+      cohortIds: ["COH-ALL-STAFF"],
     },
     {
       employeeId: "EMP-L99",
@@ -320,6 +329,7 @@ export const mockCmdb = {
       emotionalArchetype: "audit_fatigue",
       primaryTechTheme: "evidence_management",
       simulationHooks: ["Parallel contract end with Alex Rivera — dual handover risk"],
+      cohortIds: ["COH-ALL-STAFF", "COH-HELPDESK"],
     },
   ],
 
@@ -631,5 +641,13 @@ export function listEmployeeSummaries() {
     primaryTechTheme: p.primaryTechTheme ?? null,
     roleArchetype: p.roleArchetype ?? null,
     contractEndDate: p.contractEndDate ?? null,
+    cohortIds: Array.isArray(p.cohortIds) ? p.cohortIds : ["COH-ALL-STAFF"],
   }));
+}
+
+/** Personnel tagged for a role cohort (Mode A sandbox delivery). */
+export function listPersonnelByCohort(cohortId) {
+  return mockCmdb.personnel.filter((p) =>
+    (Array.isArray(p.cohortIds) ? p.cohortIds : ["COH-ALL-STAFF"]).includes(cohortId),
+  );
 }

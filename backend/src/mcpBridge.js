@@ -220,7 +220,7 @@ export function buildMcpContextPayload(employeeId) {
 
   return {
     meta: {
-      bridge: "phish-slayer-mcp-mock",
+      bridge: "phish4good-mcp-mock",
       mode: "read_only",
       generatedAt: new Date().toISOString(),
       companyId: mockCmdb.company.id,

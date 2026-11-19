@@ -1,10 +1,10 @@
-# PHISH SLAYER — Frontend (Preact + Vite + Tailwind)
+# Phish4Good — Frontend (Preact + Vite + Tailwind)
 
-Single-page **analyst dashboard** for the PHISH SLAYER PoC: employee/target selection, CMDB profile, **CASE** generation trigger, AI output review, **sandboxed HTML email preview**, human gatekeeper edits, **telemetry staging grid**, **Glory Kill** debrief modal (simulated link click), and **verbose client logging** shipped to the backend.
+Single-page **analyst dashboard** for the Phish4Good PoC: employee/target selection, CMDB profile, **CASE** generation trigger, AI output review, **sandboxed HTML email preview**, human gatekeeper edits, **telemetry staging grid**, **Glory Kill** debrief modal (simulated link click), and **verbose client logging** shipped to the backend.
 
 Stack: **Preact 10**, **Vite 6**, **Tailwind CSS 3**, **`@preact/preset-vite`**.
 
-This package is **`phish-slayer-frontend`** in the pnpm monorepo ([`../pnpm-workspace.yaml`](../pnpm-workspace.yaml), root [`../package.json`](../package.json)).
+This package is **`phish4good-frontend`** in the pnpm monorepo ([`../pnpm-workspace.yaml`](../pnpm-workspace.yaml), root [`../package.json`](../package.json)).
 
 ---
 
@@ -111,7 +111,7 @@ import { clientVerboseLog, flushClientLogsSync } from "./clientLogger.js";
 clientVerboseLog("info", "my_event", { detail: "..." });
 ```
 
-- In **development**, also mirrors to **`console.debug` / `warn` / `error`** with a `[PhishSlayer]` prefix.
+- In **development**, also mirrors to **`console.debug` / `warn` / `error`** with a `[Phish4Good]` prefix.
 - Batches POSTs to **`/api/client-log`** (debounced ~450ms).
 - **`app.jsx`** logs API requests, generation lifecycle, telemetry actions, discards.
 
@@ -123,7 +123,7 @@ Server-side lines land in **`<repo>/logs/frontend.log`** (see **`../backend/READ
 
 - **Tailwind** config: `tailwind.config.js` (content globs: `index.html`, `src/**/*`).
 - **PostCSS:** `postcss.config.js` (`tailwindcss`, `autoprefixer`).
-- Custom palette tokens under **`slayer.*`** in Tailwind config (used in components).
+- Custom palette tokens under **`p4g.*`** in Tailwind config (used in components).
 
 ---
 

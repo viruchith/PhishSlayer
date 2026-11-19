@@ -1,12 +1,12 @@
 
-> phish-slayer@0.1.0 check-grounding C:\Users\AD36038\Projects\PhishSlayer
-> pnpm --filter phish-slayer-backend check-grounding
+> phish4good@0.1.0 check-grounding C:\Users\AD36038\Projects\Phish4Good
+> pnpm --filter phish4good-backend check-grounding
 
 
-> phish-slayer-backend@0.1.0 check-grounding C:\Users\AD36038\Projects\PhishSlayer\backend
+> phish4good-backend@0.1.0 check-grounding C:\Users\AD36038\Projects\Phish4Good\backend
 > node scripts/check-grounding.js
 
-PHISH SLAYER grounding check (mock provider)
+Phish4Good grounding check (mock provider)
 
 [PASS] EMP-C01 Elena Marquez
   subject: [SIMULATION] DataDog: alert.finops.gcp.daily_spend_anomaly on Aurora FinOps Mesh

@@ -16,12 +16,12 @@ export function EmailHtmlPreview({ subject, html }) {
   return (
     <div class="space-y-2">
       {subject ? (
-        <div class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-300">
-          <span class="text-slate-500 font-semibold uppercase tracking-wide mr-2">Subject</span>
-          <span class="text-slate-100">{subject}</span>
+        <div class="rounded-lg border border-p4g-line bg-white px-3 py-2 text-xs text-gray-700">
+          <span class="text-p4g-faint font-semibold uppercase tracking-wide mr-2">Subject</span>
+          <span class="text-p4g-ink">{subject}</span>
         </div>
       ) : null}
-      <div class="rounded-lg border border-slate-700 overflow-hidden bg-slate-200 min-h-[52vh]">
+      <div class="rounded-lg border border-p4g-line overflow-hidden bg-gray-100 min-h-[52vh]">
         <iframe
           title="Simulated email HTML preview"
           class="w-full min-h-[52vh] h-[52vh] bg-white"
@@ -29,7 +29,7 @@ export function EmailHtmlPreview({ subject, html }) {
           srcDoc={srcDoc}
         />
       </div>
-      <p class="text-[10px] text-slate-500">
+      <p class="text-[10px] text-p4g-faint">
         Preview uses a sandboxed iframe (no scripts). Links open in a new tab when allowed by the browser.
       </p>
     </div>

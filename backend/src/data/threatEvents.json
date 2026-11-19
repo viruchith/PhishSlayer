@@ -1,0 +1,204 @@
+[
+  {
+    "eventId": "EVT-M365-2026-11",
+    "title": "Microsoft 365 outage — held-messages phishing pretext",
+    "summary": "After a November 2026 Microsoft 365 / Exchange Online disruption, attackers sent fake service-health notices claiming held messages would be deleted within 24 hours unless recipients clicked Restore Messages. Real incident identifiers such as EX1550543 were cited to increase credibility.",
+    "publishedAt": "2026-11-13T00:00:00.000Z",
+    "source": {
+      "name": "Synthetic advisory mirror (Microsoft 365 outage campaign)",
+      "url": "https://synthetic.phish4good.local/advisories/m365-outage-2026-11",
+      "allowlisted": true
+    },
+    "products": ["Exchange Online", "Outlook"],
+    "technologies": ["Microsoft 365"],
+    "keyFacts": [
+      {
+        "claim": "Incident identifier EX1550543 was associated with a real Exchange Online disruption.",
+        "citationLabel": "EX1550543"
+      },
+      {
+        "claim": "Lures claimed held messages would be deleted within 24 hours.",
+        "citationLabel": "24-hour deletion deadline"
+      },
+      {
+        "claim": "Primary call-to-action was a Restore Messages button or link.",
+        "citationLabel": "Restore Messages CTA"
+      },
+      {
+        "claim": "Messages impersonated Microsoft 365 service-health / outage notifications.",
+        "citationLabel": "service-health impersonation"
+      }
+    ],
+    "suggestedPretexts": [
+      {
+        "cohortId": "COH-ALL-STAFF",
+        "pretextHint": "Fake service-health notice urging Restore Messages before held mail is deleted."
+      },
+      {
+        "cohortId": "COH-HELPDESK",
+        "pretextHint": "Fake escalation asking helpdesk to mass-restore mailboxes via an external tool."
+      }
+    ],
+    "verifyOfficiallyDefault": "Check the Microsoft 365 admin center or the internal IT status page. Never use a restore link from an unexpected email."
+  },
+  {
+    "eventId": "EVT-NGINX2ROOT",
+    "title": "nginx2root — illustrative web-server advisory",
+    "summary": "Illustrative vendor-style advisory for a critical privilege-escalation issue in nginx (synthetic CVE CVE-2026-NGX2R). Affected versions 1.24.x–1.26.x on Linux. Attackers may send fake urgent mitigation or patch downloads citing the advisory.",
+    "publishedAt": "2026-11-10T00:00:00.000Z",
+    "source": {
+      "name": "Synthetic vendor bulletin — nginx2root",
+      "url": "https://synthetic.phish4good.local/advisories/nginx2root",
+      "allowlisted": true
+    },
+    "products": ["nginx"],
+    "technologies": ["Linux", "web-server"],
+    "keyFacts": [
+      {
+        "claim": "Synthetic CVE identifier CVE-2026-NGX2R describes privilege escalation to root via malformed request handling.",
+        "citationLabel": "CVE-2026-NGX2R"
+      },
+      {
+        "claim": "Affected product versions include nginx 1.24.x through 1.26.x.",
+        "citationLabel": "nginx 1.24.x–1.26.x"
+      },
+      {
+        "claim": "Vendor guidance emphasizes applying the official mitigation through internal patch management.",
+        "citationLabel": "official mitigation path"
+      },
+      {
+        "claim": "Urgency framing: unauthenticated remote path to elevated privileges on exposed reverse proxies.",
+        "citationLabel": "unauthenticated remote path"
+      }
+    ],
+    "suggestedPretexts": [
+      {
+        "cohortId": "COH-PLATFORM",
+        "pretextHint": "Fake vendor notice urging immediate mitigation download citing CVE-2026-NGX2R."
+      }
+    ],
+    "verifyOfficiallyDefault": "Open the vendor advisory from a bookmarked URL and apply patches through the internal patch-management process. Do not download mitigations from email links."
+  },
+  {
+    "eventId": "EVT-PHP2SHELL",
+    "title": "php2shell — illustrative web-application advisory",
+    "summary": "Illustrative advisory for a remote code execution pattern in PHP application stacks (synthetic CVE CVE-2026-PHP2S). Fake hotfix or failed security-scan messages may urge operators to download a package or script.",
+    "publishedAt": "2026-11-08T00:00:00.000Z",
+    "source": {
+      "name": "Synthetic advisory — php2shell",
+      "url": "https://synthetic.phish4good.local/advisories/php2shell",
+      "allowlisted": true
+    },
+    "products": ["PHP"],
+    "technologies": ["web-application", "hosting"],
+    "keyFacts": [
+      {
+        "claim": "Synthetic CVE identifier CVE-2026-PHP2S covers remote code execution via crafted request bodies.",
+        "citationLabel": "CVE-2026-PHP2S"
+      },
+      {
+        "claim": "Affected stacks include common PHP hosting runtimes on shared and dedicated hosts.",
+        "citationLabel": "PHP hosting runtimes"
+      },
+      {
+        "claim": "Attacker pretexts include fake hotfix packages and failed security-scan remediation scripts.",
+        "citationLabel": "fake hotfix / failed scan"
+      },
+      {
+        "claim": "Official remediation is via the package source and the internal security ticket queue.",
+        "citationLabel": "official package source"
+      }
+    ],
+    "suggestedPretexts": [
+      {
+        "cohortId": "COH-APPDEV",
+        "pretextHint": "Fake hotfix or failed security scan urging a package/script download."
+      }
+    ],
+    "verifyOfficiallyDefault": "Use the official package source and the internal security team's ticket queue to confirm any fix. Do not run scripts attached to unexpected scan alerts."
+  },
+  {
+    "eventId": "EVT-JAVA4SHELL",
+    "title": "Java4Shell — OpenJDK Base64 memory-corruption RCE",
+    "summary": "Java4Shell (CVE-2026-114938) is a critical memory-corruption vulnerability in OpenJDK's Base64 decoder. A remote attacker can overwrite heap memory and reach RCE. Pre-auth impact demonstrated on products such as Keycloak, Jira, Confluence, Jenkins, and Artifactory. Fake urgent JDK upgrade or scanner-remediation lures may target Java platform and application teams.",
+    "publishedAt": "2026-11-18T00:00:00.000Z",
+    "source": {
+      "name": "Calif — Java4Shell advisory",
+      "url": "https://calif.io/java4shell",
+      "allowlisted": true
+    },
+    "products": ["OpenJDK", "Java"],
+    "technologies": ["JVM", "Base64", "enterprise-java"],
+    "keyFacts": [
+      {
+        "claim": "CVE-2026-114938 is a critical memory-corruption bug in OpenJDK's Base64 decoder (CVSS 9.2).",
+        "citationLabel": "CVE-2026-114938"
+      },
+      {
+        "claim": "Malformed Base64 (for example 64 A characters followed by =) can overwrite neighboring heap memory.",
+        "citationLabel": "Base64 heap overwrite"
+      },
+      {
+        "claim": "Pre-auth RCE demonstrated on Keycloak, Jira, Confluence, Artifactory, Jenkins, and PingFederate.",
+        "citationLabel": "pre-auth RCE product list"
+      },
+      {
+        "claim": "Official remediation is to apply vendor/OpenJDK fixed builds through internal patch management.",
+        "citationLabel": "official OpenJDK fix path"
+      }
+    ],
+    "suggestedPretexts": [
+      {
+        "cohortId": "COH-PLATFORM",
+        "pretextHint": "Fake urgent OpenJDK / Java4Shell mitigation download citing CVE-2026-114938."
+      },
+      {
+        "cohortId": "COH-APPDEV",
+        "pretextHint": "Fake scanner alert urging an immediate Java runtime hotfix for Jira/Jenkins-style stacks."
+      }
+    ],
+    "verifyOfficiallyDefault": "Confirm Java4Shell guidance from the official advisory (calif.io/java4shell) and apply OpenJDK / vendor fixed builds through internal patch management. Do not download JDK bundles from unexpected email links."
+  },
+  {
+    "eventId": "EVT-RUBY2SHELL",
+    "title": "Ruby2Shell — Ruby encoding upcase heap overflow",
+    "summary": "Ruby2Shell is a one-byte heap overflow in Ruby's single-byte encoding case-conversion path (upcase / related APIs), present since Ruby 2.4.0. Rails and classic Sinatra are exposed by default on affected Rubies. Fixed releases include 3.3.14, 3.4.13, and 4.0.10. Self-hosted stacks bundling affected Rubies (for example GitLab, GHES, Mastodon) may see fake urgent Ruby upgrade lures.",
+    "publishedAt": "2026-11-19T00:00:00.000Z",
+    "source": {
+      "name": "Veria Labs — Ruby2Shell advisory",
+      "url": "https://verialabs.com/ruby2shell/",
+      "allowlisted": true
+    },
+    "products": ["Ruby", "Rails"],
+    "technologies": ["Sinatra", "Rack", "web-application"],
+    "keyFacts": [
+      {
+        "claim": "Ruby2Shell is a one-byte heap overflow reached via upcase / case-folding on certain single-byte encodings (sharp-s path).",
+        "citationLabel": "Ruby2Shell heap overflow"
+      },
+      {
+        "claim": "Fixed Ruby releases include 3.3.14, 3.4.13, and 4.0.10; 3.2 and older remain EOL/affected.",
+        "citationLabel": "Ruby 3.3.14 / 3.4.13 / 4.0.10"
+      },
+      {
+        "claim": "Rails and classic-style Sinatra are affected by default on vulnerable Ruby versions.",
+        "citationLabel": "Rails and Sinatra default exposure"
+      },
+      {
+        "claim": "Popular self-hosted products bundling affected Rubies include GitLab 19.6.0, GHES 3.22.5, and Mastodon 4.7.5.",
+        "citationLabel": "self-hosted Ruby bundles"
+      }
+    ],
+    "suggestedPretexts": [
+      {
+        "cohortId": "COH-APPDEV",
+        "pretextHint": "Fake Rails/Ruby security bulletin urging an emergency runtime upgrade package download."
+      },
+      {
+        "cohortId": "COH-PLATFORM",
+        "pretextHint": "Fake vendor notice for self-hosted GitLab/GHES Ruby2Shell emergency patch."
+      }
+    ],
+    "verifyOfficiallyDefault": "Confirm Ruby2Shell guidance from the official advisory (verialabs.com/ruby2shell) and upgrade Ruby or vendor bundles through internal change control. Do not run upgrade scripts from unexpected messages."
+  }
+]

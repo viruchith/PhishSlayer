@@ -1,4 +1,4 @@
-These high-fidelity scenarios demonstrate how **PHISH SLAYER** utilizes intelligence and context to simulate advanced spear-phishing and social engineering threats.  
+These high-fidelity scenarios demonstrate how **Phish4Good** utilizes intelligence and context to simulate advanced spear-phishing and social engineering threats.  
 
 **Related Docs:** [README](README.md) | [Concept](docs/CONCEPT.md) | [MCP notes](MCP_ARCHITECTURE.md)
 
@@ -34,7 +34,7 @@ Subject: DataDog Alert: Service 'Atlas-Main-DB' is Unreachable
 The system uses the MCP bridge to reference specific repositories and recent code commits.  
 
 **Scenario C:** The "Leaked Secret" Alert
-**Context:** A recent commit was made to the PHISH SLAYER FOSS repository.  
+**Context:** A recent commit was made to the Phish4Good FOSS repository.  
 
 **The Hook:** A security warning about a hardcoded API token.
 
@@ -63,7 +63,7 @@ These scenarios simulate a "broken" internal culture or a malicious actor who ha
 
 **Simulated Email:**
 
-Subject: Action Required: Update to Asset ID-992 (PHISH SLAYER)
+Subject: Action Required: Update to Asset ID-992 (Phish4Good)
 
 "Hi, I'm from the ITAM department. We noticed the Asset ID-992 documentation is outdated in the CMDB viewer. Since you are the registered owner, please click here to sync the latest versioning metadata for the Intelligence Engine components: [Malicious Link]"  
 

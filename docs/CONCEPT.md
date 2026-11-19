@@ -1,127 +1,157 @@
-# PHISH SLAYER — Concept & design exploration
+# Phish4Good — Concept & design
 
-This document captures the **idea** behind PHISH SLAYER: a context-grounded phishing-simulation research direction. It is **not** a product proposal, delivery plan, or claim of production readiness.
+Phish4Good is an open-source **Threat-to-Training** platform: convert trusted cyber advisories and real-world events into safe, role-relevant security exercises — grounded, validated, and human-approved.
 
-**Related:** [README](../README.md) · [MCP notes](../MCP_ARCHITECTURE.md) · [Examples](../EXAMPLES.md) · [Hypotheses](./HYPOTHESES.md) · [Threat model](./THREAT_MODEL.md) · [Responsible use](./RESPONSIBLE_USE.md)
+**Goal:** help defenders train at the speed of attackers. **Not** to create better phishing.
+
+**Related:** [Hackathon proposal](../Phish4Good_HackathonProposal.md) · [PoC demo](./PHISH4GOOD_POC.md) · [README](../README.md) · [Hypotheses](./HYPOTHESES.md) · [Threat model](./THREAT_MODEL.md) · [Responsible use](./RESPONSIBLE_USE.md)
 
 ---
 
 ## Problem
 
-Security awareness often relies on static templates (“Password expired,” “HR policy update”). People learn those patterns and stop transferring the skill to novel attacks. Real spear-phishing uses OSINT and internal context — projects, tools, colleagues. Security teams rarely have bandwidth to hand-craft that depth for every audience.
+Security-awareness programs run on a calendar. Attacker campaigns run on the news cycle.
 
-## Limits of existing systems (as commonly observed)
+- After major outages or CVE disclosures, phishing lures appear within hours (e.g. Microsoft 365 “held messages” / `EX1550543` campaigns in Nov 2026).  
+- Generic annual modules cannot reference yesterday’s event or the pretext each cohort actually faces.  
+- Hand-built simulations take days, so they miss the attacker’s window.  
+- Employees are rarely taught the habit that matters: **verify unexpected requests through official channels**, not the link in the message.  
+- Naïve “generate phishing from the news” automation is dangerous: hallucination, privacy leaks, unsafe realism.
 
-- Template libraries that are not tied to the learner’s actual work context  
-- Little or no native use of asset / CMDB / identity metadata  
-- Failure-focused UX without a concrete, scenario-specific debrief  
+## Solution: Threat-to-Training pipeline
 
-These are design observations, not a competitive benchmark study.
+Each event passes through the same seven stages (proposal §3.1):
 
-## The CASE idea
+| Step | Stage | What happens |
+|------|--------|----------------|
+| 1 | Ingest | Trusted advisories / bulletins / status reports, stored with source link |
+| 2 | Identify cohorts | Role-level mapping (platform, helpdesk, finance, all staff, …). **No individual profiling** |
+| 3 | Generate | Simulation grounded in advisory facts; citations + red flags |
+| 4 | Validate | Privacy, safety, grounding; no live malicious links or credential capture |
+| 5 | Human approval | Reviewer approves, edits, or rejects |
+| 6 | Deliver | Sandboxed internal channel; clicks recorded; no credentials |
+| 7 | Debrief | How the pretext worked + how to verify officially |
 
-**Context-Aware Simulation Engine (CASE):** pull allowlisted professional metadata (e.g. project IDs, linked tools, peer roles), ask an LLM to draft a simulation narrative grounded in that metadata, and require a human analyst to approve or edit before anything is staged. The PoC never dispatches messages.
+### Optional Mode B — CASE (context-aware personalization)
+
+**Context-Aware Simulation Engine (CASE):** allowlisted professional CMDB metadata → LLM/mock draft → policy → human stage. Useful for technical spear-phish *style* drills; secondary to event→cohort training in this PoC.
+
+---
 
 ## Layer status (PoC vs idea)
 
 | Layer | Intent | Status in this repo |
 |-------|--------|---------------------|
-| Synthetic / real CMDB context | Source of grounding anchors | **Implemented (PoC)** — in-memory synthetic CMDB only |
-| MCP-style context bridge | Standardize tool-style reads | **Mock** — HTTP route shaped like context fetch; not a real MCP server |
-| LLM generation | Draft subject / pretext / body | **Implemented (PoC)** — Gemini with mock fallback |
-| Field allowlist + prompt hygiene | Minimize and delimit untrusted data | **Implemented (PoC)** — `fieldAllowlist.js`, `promptSanitize.js`, `buildPromptPayload.js` |
-| Content policy gate | Block sensitive personal/HR topics | **Implemented (PoC)** — `contentPolicy.js` + UI block on approve |
-| Human-in-the-loop review UI | Approve / edit / discard | **Implemented (PoC)** |
-| Dispatch (email / Slack / Teams) | Deliver simulations | **Idea only** — out of scope |
-| Persistent telemetry / reporting | Measure campaigns | **Mock** — in-memory array only |
-| Positive / specific debrief UX | Teach the red flag in *this* message | **Partial** — click opens a simple “Glory Kill” modal; not a full learning product |
-| Auth, RBAC, audit ledger, multi-tenant | Enterprise controls | **Idea only** |
+| Advisory ingest + source allow-list | Ground exercises in trusted events | **Implemented (PoC)** — JSON seeds + manual ingest; no live scrapers |
+| Cohort mapper | Product/tech → role cohorts | **Implemented (PoC)** — rule-based MVP |
+| Grounded generator (citations, red flags) | Event + cohort → exercise | **Implemented (PoC)** — Gemini + mock templates |
+| Policy + grounding validator | Block unsafe / ungrounded drafts | **Implemented (PoC)** — hard gate on approve |
+| Approval queue / dashboard | Human control + edit | **Implemented (PoC)** — in-memory queue |
+| Sandbox delivery | Safe channel; no real send | **Implemented (PoC)** — synthetic inbox |
+| Debrief (“how this pretext worked”) | Verification habit | **Implemented (PoC)** — event-aware debrief panel |
+| Aggregate cohort metrics | Behavior signals without individual scorecards | **Implemented (PoC)** — `/api/metrics` |
+| Synthetic CMDB + CASE (Mode B) | Personalized technical lures | **Implemented (PoC)** |
+| Field allowlist + prompt hygiene (Mode B) | Minimize prompt data | **Implemented (PoC)** |
+| Real dispatch (email / Slack / Teams) | Production delivery | **Idea only** — out of scope |
+| PostgreSQL / durable audit ledger | Persistence & compliance | **Idea only** — PoC is in-memory |
+| Auth, RBAC, multi-tenant | Enterprise controls | **Idea only** |
+| Live advisory collectors | Scheduled feed pull | **Idea only** — seeds + allow-listed ingest |
 
 ### PoC flow (what runs today)
+
+**Mode A — Threat-to-Training (primary)**
+
+```text
+seeded advisory → cohort mapper → Gemini/mock exercise → policy+grounding validate → human approve → sandbox inbox → debrief (+ aggregate metrics)
+```
+
+**Mode B — Personalized CASE (optional)**
 
 ```text
 synthetic CMDB → mock MCP context → LLM (or mock) → policy check → human review → in-memory telemetry
 ```
 
-### Vision architecture (not built)
+Demo script: [PHISH4GOOD_POC.md](./PHISH4GOOD_POC.md).
 
-![Vision architecture — not the running PoC](../phish_slayer_architecture.jpeg)
+### Vision architecture (aspirational)
 
-*Caption: aspirational layered design (real CMDB connectors, dispatch, learning loop). Most boxes are **Idea only**. The running PoC is the short flow above: synthetic CMDB → mock MCP → LLM → policy → human review → in-memory telemetry.*
+![Vision architecture — not the running PoC](../phish4good_architecture.jpeg)
+
+*Caption: longer-term layered design (real connectors, dispatch, learning loop). Most boxes remain **Idea only**. The running hackathon PoC is the Mode A pipeline above on Preact + Fastify + in-memory/JSON.*
+
+---
+
+## Safety and responsible-use guardrails
+
+From the proposal — the platform stays on the defender’s side:
+
+- **Grounded, not invented** — factual claims must cite the advisory; unsupported claims fail validation  
+- **Safe by construction** — controlled sandbox domains/paths; no credential capture; no malware; no external sending  
+- **Privacy-preserving** — cohort-level targeting; no personal data in Mode A prompts; aggregate reporting  
+- **Human in the loop** — approve / edit / reject logged for the session  
+- **Defender-focused output** — red flags + verification steps; not reusable attack kits  
+- **Open and reviewable** — code, policy rules, and templates are FOSS  
 
 ## Technology (honest)
 
 **Implemented in this PoC**
 
 - Node.js, Fastify backend  
-- Preact + Vite + Tailwind frontend  
+- Preact + Vite + Tailwind frontend (proposal mentioned React; PoC kept Preact for speed)  
 - Google Gemini (`gemini-2.5-flash` by default) with offline mock fallback  
-- pnpm workspace monorepo  
+- pnpm workspace monorepo; in-memory / JSON seeds (not PostgreSQL yet)  
 
-**Possible later (not implemented):** other LLM providers (Claude, Llama, OpenAI, local models), real MCP servers, CMDB connectors (ServiceNow, Jira SM, etc.), dispatch adapters. Python and alternate UI frameworks are not used here.
+**Possible later:** live collectors, durable DB, real MCP/CMDB connectors, other LLM providers / local models, dispatch adapters, auth/RBAC.
 
 ## Data handling (honest)
 
-What reaches the model depends on the **LLM provider’s terms** (retention, training use, residency). This PoC reduces risk by sending only **allowlisted** professional fields through a single prompt-building boundary, with sanitization of untrusted CMDB strings. For sensitive environments, a **local / self-hosted model** is the safer option. The repo does **not** claim that PII or IP “never enters training memory.”
+Mode A prompts receive **advisory text + cohort description only**. Mode B sends only **allowlisted** professional CMDB fields through a single prompt-building boundary. Cloud LLM **provider terms** still apply when a key is used. Prefer local/self-hosted models for sensitive environments.
 
-## Dispatch and commercial platforms
+## Expected outcomes (aspirational — not measured here)
 
-Dispatch, deliverability, tracking pixels, and enterprise reporting integrations are **out of scope**. This idea could **plug into** existing phishing platforms rather than replace them. It is not a drop-in replacement for commercial SAT products.
+| Outcome | Description |
+|---------|-------------|
+| Faster time-to-training | Advisory → approved exercise in hours while the pretext is live |
+| Role-relevant exercises | Cohorts see the lure they are most likely to face |
+| Verification habit | Official-channel checks instead of message links |
+| Safe governed automation | Grounding + policy + human approval |
+| Measurable behavior change | Aggregate click / report / verify rates by cohort |
+| Community benefit | Open pipeline, policies, and templates |
 
-## Debrief / “Glory Kill” today vs idea
-
-**Today:** simulating a link click opens a modal that frames the event as a learning moment and shows staged metadata. There is no adaptive curriculum, skill-gap mapping, or LMS integration.
-
-**Idea:** a short, non-punitive debrief that points at the *verifiable* red flag in that specific message (mismatched sender vs named project owner, odd URL vs known tool, etc.).
-
-## Advantages worth testing (not proven)
-
-- Personalization at analyst-assisted scale  
-- Training that tests verification habits, not template recognition  
-- FOSS exploration without vendor lock-in for the *generation* layer  
-
-None of these are measured results in this repository. See [HYPOTHESES.md](./HYPOTHESES.md).
-
-## Hypotheses to test (not KPI targets)
-
-| Question | Why it might be wrong | How to probe |
-|----------|----------------------|--------------|
-| Grounded lures change report/click rates vs good generic lures | Novelty fades; generics may already be strong | A/B with matched difficulty, authorized pilot |
-| Specific debriefs beat generic training pages | Attention/fatigue dominate content quality | Randomize debrief style; measure short-term recall |
-| Grounding checks catch hallucinations | Models paraphrase IDs; checkers miss variants | Automate string presence vs CMDB; human spot-check |
-| CMDB is the best context source | Calendars/tickets may be richer | Compare context sources for lure plausibility ratings |
-| Personalization stays ethical under policy gates | Pressure tactics still harm trust | Red-team policy rules; works-council review |
-
-There are **no** claimed CTR/TTR percentage targets, deployment counts, or “100% compliance” goals in this concept.
+See [HYPOTHESES.md](./HYPOTHESES.md) for how to test these without over-claiming.
 
 ## If this were taken further
 
-1. Real read-only CMDB connectors behind a true MCP (or plain) API  
-2. Optional plug-in to an existing simulation dispatch platform  
-3. Stronger evaluation harness (grounding, policy, human ratings)  
-4. Auth, roles, immutable audit log, and rate limits  
-5. Local-model path for sensitive data  
-6. Privacy / labor-law review before any per-person adaptive difficulty  
+1. Scheduled collectors for allow-listed advisory / status feeds with durable dedupe  
+2. PostgreSQL (or equivalent) for events, approvals, and aggregate outcomes  
+3. Auth, roles, immutable audit log, and rate limits  
+4. Optional plug-in to an existing simulation dispatch platform  
+5. Stronger evaluation harness (grounding, policy, human ratings)  
+6. Local-model path for sensitive data  
+7. Privacy / labor-law review before any per-person adaptive difficulty  
 
-**Note on adaptive difficulty:** scoring *individuals* and escalating pressure raises privacy and labor-law concerns. Prefer department-level or voluntary skill tracks if explored at all.
+**Note on adaptive difficulty:** scoring *individuals* and escalating pressure raises privacy and labor-law concerns. Prefer cohort-level or voluntary skill tracks.
 
 ## FAQ (aligned with the code)
 
 ### Is it production-ready?
-No. It is a local proof of concept.
+No. Local hackathon PoC on synthetic data.
+
+### What is the primary demo?
+Threat-to-Training: pick a seeded event (start with M365 outage) → map cohorts → generate → approve → sandbox click → debrief.
 
 ### What data goes to the LLM?
-Only fields on the prompt allowlist (professional identifiers such as role, department, project IDs, linked tool refs, asset display names, peer roles). Contact details and other disallowed fields are dropped at the prompt-building boundary. See the allowlist module and the “fields sent to the model” panel in the UI.
+**Mode A:** advisory + cohort only. **Mode B:** allowlisted professional CMDB fields only (see UI “fields sent to the model”).
 
 ### How is consent enforced?
-It is **not** enforced in the PoC. Consent, authorization, and auditability are design requirements for any real deployment — not implemented here.
+It is **not** enforced in the PoC. Authorization and auditability are requirements for any real deployment.
 
-### Does a human review before “send”?
-Yes for staging: the dashboard requires generate → edit/approve → in-memory telemetry. There is no real send path.
+### Does a human review before delivery?
+Yes. Approve is required; validation must pass. Delivery is sandbox-only — there is no real send path.
 
 ### Which systems does it integrate with?
-None in production. The PoC uses a synthetic CMDB. Real ServiceNow/Jira/Slack/Teams connectors are ideas only.
+None in production. Seeds + synthetic CMDB. Real ServiceNow/Jira/email connectors are ideas only.
 
 ## Licensing
 
-This project is licensed under **GPL-3.0**. The maintainer may revisit licensing for connectors or dual-licensing later; nothing here changes the current LICENSE file.
+**GPL-3.0**. The maintainer may revisit licensing for connectors or dual-licensing later; nothing here changes the current LICENSE file.

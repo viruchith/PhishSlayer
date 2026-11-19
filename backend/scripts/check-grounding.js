@@ -38,7 +38,7 @@ for (const emp of employees) {
   });
 }
 
-console.log("PHISH SLAYER grounding check (mock provider)\n");
+console.log("Phish4Good grounding check (mock provider)\n");
 for (const row of rows) {
   const mark = row.ok ? "PASS" : "FAIL";
   console.log(`[${mark}] ${row.employeeId} ${row.name ?? ""}`);

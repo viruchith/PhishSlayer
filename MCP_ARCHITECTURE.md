@@ -1,4 +1,4 @@
-# PHISH SLAYER: MCP architecture notes (concept + PoC)
+# Phish4Good: MCP architecture notes (concept + PoC)
 
 **Status:** Design exploration. The running PoC exposes a **mock** context HTTP route (`GET /api/mcp/context/:employeeId`), not a full MCP JSON-RPC server. License for this repository is **GPL-3.0** (see [LICENSE](./LICENSE)); older draft text below that mentioned Apache/MIT referred to a packaging idea only.
 
@@ -184,7 +184,7 @@ Reusable, parameterized prompt templates that enforce security guardrails, tone,
 
 ### 5.3 Example packaging sketch (Idea only — not this repo’s layout)
 ```
-/phish-slayer-mcp/          # hypothetical package
+/phish4good-mcp/          # hypothetical package
 ├── src/server.(js|py)
 ├── cmdb_adapters/
 ├── security/

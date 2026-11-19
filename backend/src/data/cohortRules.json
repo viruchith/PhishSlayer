@@ -1,0 +1,38 @@
+[
+  {
+    "ruleId": "RULE-M365-OUTLOOK",
+    "match": { "products": ["Exchange Online", "Outlook"], "technologies": ["Microsoft 365"] },
+    "cohortIds": ["COH-ALL-STAFF", "COH-HELPDESK"],
+    "reason": "Mailbox and service-health pretexts target Outlook/Exchange users and helpdesk."
+  },
+  {
+    "ruleId": "RULE-NGINX-PLATFORM",
+    "match": { "products": ["nginx"], "technologies": ["Linux", "web-server"] },
+    "cohortIds": ["COH-PLATFORM"],
+    "reason": "Web-server advisories map to platform, DevOps, and SRE cohorts."
+  },
+  {
+    "ruleId": "RULE-PHP-APPDEV",
+    "match": { "products": ["PHP"], "technologies": ["web-application", "hosting"] },
+    "cohortIds": ["COH-APPDEV", "COH-PLATFORM"],
+    "reason": "PHP / hosting advisories map to app-dev and platform hosting teams."
+  },
+  {
+    "ruleId": "RULE-JAVA4SHELL",
+    "match": { "products": ["OpenJDK", "Java"], "technologies": ["JVM", "Base64", "enterprise-java"] },
+    "cohortIds": ["COH-PLATFORM", "COH-APPDEV"],
+    "reason": "Java/OpenJDK RCE advisories map to platform and application teams running JVM services."
+  },
+  {
+    "ruleId": "RULE-RUBY2SHELL",
+    "match": { "products": ["Ruby", "Rails"], "technologies": ["Sinatra", "Rack", "web-application"] },
+    "cohortIds": ["COH-APPDEV", "COH-PLATFORM"],
+    "reason": "Ruby/Rails advisories map to app-dev and platform teams operating Ruby runtimes and self-hosted stacks."
+  },
+  {
+    "ruleId": "RULE-BILLING-FINANCE",
+    "match": { "products": [], "technologies": ["billing", "invoice"] },
+    "cohortIds": ["COH-FINANCE"],
+    "reason": "Billing and invoice language maps to finance / FinOps."
+  }
+]
