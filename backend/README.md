@@ -54,7 +54,7 @@ Loaded at startup (and refreshed on demand) via **`src/loadEnv.js`**. Candidate 
 | **`GOOGLE_API_KEY`** | No* | Alias for the same key if you prefer Google’s naming |
 | **`PORT`** | No | HTTP port (default `8787`) |
 | **`HOST`** | No | Bind address (default `0.0.0.0`) |
-| **`GEMINI_MODEL`** | No | Model id (default `gemini-2.5-flash`) |
+| **`GEMINI_MODEL`** | No | Model id (default `gemini-3.5-flash-lite`) |
 | **`GEMINI_MAX_OUTPUT_TOKENS`** | No | Max output tokens (default `8192`, cap `32768`) |
 
 \*If missing or invalid, **`POST /api/simulation/generate`** still returns **`200`** with a **local mock** scenario so the UI stays testable.
@@ -164,7 +164,7 @@ Each line is a single JSON object with at least **`ts`** (ISO time).
 | Symptom | Likely cause | What to try |
 |---------|----------------|------------|
 | **`EADDRINUSE` :8787** | Another process bound to the port | Free the port or set **`PORT`** |
-| Gemini **`404` model** | Deprecated / wrong model id | Set **`GEMINI_MODEL`** (e.g. `gemini-2.5-flash`) |
+| Gemini **`404` model** | Deprecated / wrong model id | Set **`GEMINI_MODEL=gemini-3.5-flash-lite`** (2.5 Flash is deprecated) |
 | **`missing_api_key`** in generate | No key in merged `.env` | Check `mergedEnvSources` / `envDiagnostics` from **`/api/health`**; fix paths; restart |
 | **`unparseable_model_output`** | Truncated or non-JSON model output | Raise **`GEMINI_MAX_OUTPUT_TOKENS`**; inspect `logs/backend.log` `gemini` entries |
 

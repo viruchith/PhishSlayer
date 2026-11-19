@@ -79,7 +79,7 @@ pnpm run dev
 - Frontend: http://127.0.0.1:5173  
 - Backend health: http://127.0.0.1:8787/api/health  
 
-Optional: copy [`.env.example`](./.env.example) to `.env` and set `GEMINI_API_KEY`. Without a key, generation uses local mock templates end-to-end.
+Optional: copy [`.env.example`](./.env.example) to `.env` and set `GEMINI_API_KEY` (default model `gemini-3.5-flash-lite`). Without a key, generation uses local mock templates end-to-end.
 
 Other scripts: `pnpm run lint` · `pnpm run test` · `pnpm run build` · `pnpm run check-grounding`
 

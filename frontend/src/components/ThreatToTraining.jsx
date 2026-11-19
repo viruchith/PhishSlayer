@@ -103,10 +103,17 @@ export function ThreatToTraining({ geminiKeyConfigured }) {
         }),
       });
       setCurrentDraft(data.exercise);
-      setMessage(
-        `Generated via ${data.exercise?.generationMeta?.source ?? "unknown"}` +
-          (data.exercise?.validation?.allowed ? " — validation passed" : " — validation issues"),
-      );
+      {
+        const meta = data.exercise?.generationMeta ?? {};
+        let msg = `Generated via ${meta.source ?? "unknown"}`;
+        if (meta.model) msg += ` (${meta.model})`;
+        msg += data.exercise?.validation?.allowed ? " — validation passed" : " — validation issues";
+        if (meta.reason && meta.source !== "gemini") msg += ` — ${meta.reason}`;
+        setMessage(msg);
+        if (meta.detail && meta.source !== "gemini") {
+          setGenError(String(meta.detail).slice(0, 400));
+        }
+      }
       await refreshQueues();
     } catch (e) {
       setGenError(e.message);
@@ -335,6 +342,9 @@ export function ThreatToTraining({ geminiKeyConfigured }) {
               </span>
               <span class="rounded border border-p4g-line px-2 py-0.5 text-p4g-muted">
                 source: {currentDraft.generationMeta?.source}
+                {currentDraft.generationMeta?.model
+                  ? ` · ${currentDraft.generationMeta.model}`
+                  : ""}
               </span>
             </div>
 

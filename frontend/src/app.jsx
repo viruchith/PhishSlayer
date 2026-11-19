@@ -6,6 +6,7 @@ export function App() {
   const [backendConn, setBackendConn] = useState({
     status: "checking",
     geminiKeyConfigured: null,
+    geminiModel: null,
     envSources: [],
   });
 
@@ -21,17 +22,20 @@ export function App() {
         const res = await fetch("/api/health");
         if (cancelled) return;
         if (!res.ok) {
-          setBackendConn({ status: "down", geminiKeyConfigured: null, envSources: [] });
+          setBackendConn({ status: "down", geminiKeyConfigured: null, geminiModel: null, envSources: [] });
           return;
         }
         const data = await res.json().catch(() => ({}));
         setBackendConn({
           status: "up",
           geminiKeyConfigured: Boolean(data.geminiKeyConfigured),
+          geminiModel: data.geminiModel ?? null,
           envSources: Array.isArray(data.envSources) ? data.envSources : [],
         });
       } catch {
-        if (!cancelled) setBackendConn({ status: "down", geminiKeyConfigured: null, envSources: [] });
+        if (!cancelled) {
+          setBackendConn({ status: "down", geminiKeyConfigured: null, geminiModel: null, envSources: [] });
+        }
       }
     };
     ping();
@@ -92,6 +96,9 @@ export function App() {
                 <span class={backendConn.geminiKeyConfigured ? "text-emerald-700" : "text-amber-700"}>
                   {backendConn.geminiKeyConfigured ? "key loaded" : "mock fallback"}
                 </span>
+                {backendConn.geminiModel ? (
+                  <span class="text-p4g-faint"> · {backendConn.geminiModel}</span>
+                ) : null}
                 <span class="text-p4g-faint"> · /api → :8787</span>
               </p>
             ) : backendConn.status === "down" ? (

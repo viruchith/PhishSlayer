@@ -4,8 +4,8 @@ import { logBackendVerbose } from "./fileLogger.js";
 import { buildPromptPayload } from "./buildPromptPayload.js";
 import { findPersonnelById } from "./mockCmdb.js";
 
-/** Default fast model for Google AI Studio / Generative Language API (v1beta). */
-const DEFAULT_MODEL_ID = "gemini-2.5-flash";
+/** Default model for Google AI Studio / Generative Language API (v1beta). */
+const DEFAULT_MODEL_ID = "gemini-3.5-flash-lite";
 
 function resolveModelId() {
   const fromEnv = String(process.env.GEMINI_MODEL || "").trim();
@@ -447,6 +447,7 @@ export async function generateSimulationFromContext(mcpPayload, options = {}) {
       simulation: mockSim,
       source: "mock_fallback",
       reason: forceMock ? (options.useGemini === false ? "use_gemini_false" : "force_mock") : "missing_api_key",
+      model: modelId,
       diagnostics: getEnvDiagnostics(),
       promptPayload: built.promptPayload,
       fieldsSentToModel: built.fieldsSentToModel,
@@ -464,10 +465,10 @@ export async function generateSimulationFromContext(mcpPayload, options = {}) {
       systemInstruction: SYSTEM_INSTRUCTION,
     });
 
+    // Gemini 3.5 Flash-Lite: do not set temperature/top_p/top_k (ignored now; errors later).
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: built.userContent }] }],
       generationConfig: {
-        temperature: 0.65,
         maxOutputTokens: resolveMaxOutputTokens(),
         responseMimeType: "application/json",
       },
@@ -492,6 +493,7 @@ export async function generateSimulationFromContext(mcpPayload, options = {}) {
         simulation: mockSim,
         source: "mock_fallback",
         reason: finishReason === "MAX_TOKENS" ? "output_truncated" : "unparseable_model_output",
+        model: modelId,
         rawPreview: text.slice(0, 600),
         finishReason,
         detail:
@@ -521,6 +523,7 @@ export async function generateSimulationFromContext(mcpPayload, options = {}) {
       simulation: mockSim,
       source: "mock_fallback",
       reason: rateLimited ? "rate_limit" : "api_error",
+      model: modelId,
       detail: String(err?.message ?? err),
       promptPayload: built.promptPayload,
       fieldsSentToModel: built.fieldsSentToModel,
@@ -545,6 +548,7 @@ export async function generateExerciseFromEvent({ event, cohort, useGemini = tru
       exercise: mockExercise,
       source: "mock_fallback",
       reason: !wantGemini ? "use_gemini_false" : "missing_api_key",
+      model: modelId,
       diagnostics: getEnvDiagnostics(),
       promptPayload: { eventId: event?.eventId, cohortId: cohort?.cohortId },
     };
@@ -563,10 +567,10 @@ export async function generateExerciseFromEvent({ event, cohort, useGemini = tru
       systemInstruction: EXERCISE_SYSTEM_INSTRUCTION,
     });
 
+    // Gemini 3.5 Flash-Lite: do not set temperature/top_p/top_k (ignored now; errors later).
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: userContent }] }],
       generationConfig: {
-        temperature: 0.55,
         maxOutputTokens: resolveMaxOutputTokens(),
         responseMimeType: "application/json",
       },
@@ -586,6 +590,7 @@ export async function generateExerciseFromEvent({ event, cohort, useGemini = tru
         exercise: mockExercise,
         source: "mock_fallback",
         reason: finishReason === "MAX_TOKENS" ? "output_truncated" : "unparseable_model_output",
+        model: modelId,
         rawPreview: text.slice(0, 600),
         finishReason,
         promptPayload: { eventId: event?.eventId, cohortId: cohort?.cohortId },
@@ -623,10 +628,11 @@ export async function generateExerciseFromEvent({ event, cohort, useGemini = tru
       exercise: mockExercise,
       source: "mock_fallback",
       reason: rateLimited ? "rate_limit" : "api_error",
+      model: modelId,
       detail: String(err?.message ?? err),
       promptPayload: { eventId: event?.eventId, cohortId: cohort?.cohortId },
     };
   }
 }
 
-export { MOCK_SCENARIO, DEFAULT_MODEL_ID };
+export { MOCK_SCENARIO, DEFAULT_MODEL_ID, resolveModelId };

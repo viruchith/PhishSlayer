@@ -98,7 +98,7 @@ From the proposal — the platform stays on the defender’s side:
 
 - Node.js, Fastify backend  
 - Preact + Vite + Tailwind frontend (proposal mentioned React; PoC kept Preact for speed)  
-- Google Gemini (`gemini-2.5-flash` by default) with offline mock fallback  
+- Google Gemini (`gemini-3.5-flash-lite` by default) with offline mock fallback  
 - pnpm workspace monorepo; in-memory / JSON seeds (not PostgreSQL yet)  
 
 **Possible later:** live collectors, durable DB, real MCP/CMDB connectors, other LLM providers / local models, dispatch adapters, auth/RBAC.

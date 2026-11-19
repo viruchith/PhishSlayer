@@ -8,6 +8,7 @@ import {
   generateSimulationFromContext,
   generateExerciseFromEvent,
   isGeminiKeyConfigured,
+  resolveModelId,
 } from "./geminiService.js";
 import { checkContentPolicy } from "./contentPolicy.js";
 import { FIELDS_SENT_TO_MODEL } from "./fieldAllowlist.js";
@@ -93,6 +94,7 @@ fastify.get("/api/health", async () => {
     service: "phish4good-backend",
     product: "Phish4Good",
     geminiKeyConfigured: isGeminiKeyConfigured(),
+    geminiModel: resolveModelId(),
     envSources: mergedEnvSources,
     envDiagnostics: getEnvDiagnostics(),
     verboseLogDir: LOG_DIR,
